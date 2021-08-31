@@ -11,6 +11,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.dateformat import DateFormat
+from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView
 
 from projects.models import Project
@@ -183,6 +184,8 @@ def new_ticket(request, client_project_id):
 class SupportRequestDeleteView(DeleteView):
     model = SupportRequest
 
+    @method_decorator(login_required)
+    @method_decorator(staff_member_required)
     def delete(self, request, *args, **kwargs):
         self.get_object().delete()
         payload = {
@@ -195,6 +198,8 @@ class SupportRequestDeleteView(DeleteView):
 class SupportRequestUpdateView(UpdateView):
     model = SupportRequest
 
+    @method_decorator(login_required)
+    @method_decorator(staff_member_required)
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
         obj.status = request.POST["status"]
