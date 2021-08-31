@@ -19,7 +19,7 @@ class Client(models.Model):
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    logo = models.FileField(null=True, blank=True, upload_to='clients/', default='client_default.png')
+    logo = models.FileField(null=True, blank=True, upload_to='clients/', default='clients/client_default.png')
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
