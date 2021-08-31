@@ -2,20 +2,19 @@ from crum import get_current_user
 from django.conf import settings
 from django.db import models
 
-
 # Create your models here.
 from django.utils.datetime_safe import datetime
 
 
 class Project(models.Model):
-
     class Meta:
         db_table = 'projects'
+        verbose_name_plural = "Manage Projects"
 
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    logo = models.FileField(null=True, blank=True, upload_to='clients/')
+    logo = models.FileField(null=True, blank=True, upload_to='projects/', default='project_default.png')
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

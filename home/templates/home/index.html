@@ -12,38 +12,38 @@
     <div class="card text-white bg-primary m-1" style="max-width: 18rem;">
         <div class="card-header">Projects</div>
         <div class="card-body">
-            <h5 class="card-title">Total Active Projects -  5</h5>
+            <h5 class="card-title">Total Projects -  {{ projects_count }}</h5>
             <hr>
-            <p class="card-text">2 Projects are active</p>
-            <p class="card-text">3 Projects are not unassigned with clients</p>
+            <p class="card-text">{{ assigned_projects_count }} Projects are active</p>
+            <p class="card-text">{{ unassigned_projects_count }} Projects are not unassigned with clients</p>
         </div>
     </div>
     <div class="card text-white bg-secondary m-1" style="max-width: 18rem;">
         <div class="card-header">Clients</div>
         <div class="card-body">
-            <h5 class="card-title">Total Active Clients  -  10</h5>
+            <h5 class="card-title">Total Clients  -  {{ clients_count }}</h5>
             <hr>
-            <p class="card-text">3 of them are active</p>
-            <p class="card-text">7 of them are not unassigned with projects</p>
+            <p class="card-text">{{ assigned_clients_count }} of them are active</p>
+            <p class="card-text">{{ unassigned_clients_count }} of them are not unassigned with projects</p>
         </div>
     </div>
     <div class="card text-white bg-success m-1" style="max-width: 18rem;">
         <div class="card-header">AMC Renewal</div>
         <div class="card-body">
-            <h5 class="card-title">Due for AMC Renewal -  2</h5>
+            <h5 class="card-title">Due Today - {{ amc_due_today_count }} </h5>
             <hr>
-            <p class="card-text">2 Projects are due</p>
-            <p class="card-text">3 Projects are overduel</p>
+            <p class="card-text">{{ upcoming_amc_count }} Projects will be due with in 1 month</p>
+            <p class="card-text">{{ overdue_amc_count }} Projects are overdue</p>
         </div>
     </div>
     <div class="card text-white bg-danger m-1" style="max-width: 18rem;">
         <div class="card-header">Support Tickets</div>
         <div class="card-body">
-            <h5 class="card-title">Total Tickets - 2564</h5>
+            <h5 class="card-title">Total Tickets - {{ total_ticket_count }}</h5>
             <hr>
-            <p class="card-text">Resolved : 565</p>
-            <p class="card-text">Progress : 100</p>
-            <p class="card-text">Waiting for review : 55</p>
+            <p class="card-text">Resolved : {{ resolved_ticket_count }}</p>
+            <p class="card-text">Progress : {{ in_progress_ticket_count }}</p>
+            <p class="card-text">Waiting for review : {{ with_client_review_ticket_count }}</p>
         </div>
     </div>
 
