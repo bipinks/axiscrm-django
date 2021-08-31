@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+
+{% load custom_tags %}
+
+{% block content %}
+    <style>
+
+        .img-sm {
+            width: 46px;
+            height: 46px;
+        }
+
+        .mar-top {
+            margin-top: 15px;
+        }
+
+
+    </style>
+
+    <div class="m-3" style="text-align:center">
+        <h4>Support Ticket No - # {{ support_request_data.ticket_no }} </h4>
+    </div>
+
+    <div class="alert alert-success" role="alert" style="display: none">
+
+    </div>
+    <div class="alert alert-danger" role="alert" style="display: none">
+
+    </div>
+
+
+    <div class="container-fluid mt-100">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="media flex-wrap w-100 align-items-center">
+                            <img src="https://i.imgur.com/iNmBizf.jpg"
+                                 class="d-block ui-w-40 rounded-circle"
+                                 alt="">
+
+                            <div class="row">
+
+                                <div class="media-body ml-3 col-md-9">
+                                    <a href="javascript:void(0)" data-abc="true">
+                                        {{ support_request_data.created_by.first_name }}
+                                        {{ support_request_data.created_by.last_name }}
+                                    </a>
+                                    <div class="text-muted small">
+                                        {{ support_request_data.created_at | timesince }} ago
+                                    </div>
+                                    <div class="text-muted small">
+                                        Status : {{ support_request_data.get_status_display }}
+                                    </div>
+                                </div>
+                                <div class="text-muted small ml-3 col-md-3" style="float:right">
+                                    <div>Member since <strong>
+                                        {{ support_request_data.created_by.date_joined | date }}
+                                    </strong></div>
+                                    <div><strong>{{ user_total_service_requests }}</strong> service requests</div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p> {{ support_request_data.description|safe }} </p>
+                    </div>
+
+                    {% if support_request_data.supportrequestfiles_set.all %}
+
+                        <div class="card-footer">
+
+                            {% for f in support_request_data.supportrequestfiles_set.all %}
+                                <a target="_blank" class="activity_file_link" href="{{ f.file.url }}"
+                                   style="margin-right: 15px">
+                                    File-{{ forloop.counter }}
+                                </a>
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="container bootdey">
+        <div class="col-md-12 bootstrap snippets">
+            <div class="panel">
+                <div class="panel-body">
+
+                    <form id="posting-form">
+                        <input type="hidden" id="support_request_id" value="{{ support_request_data.id }}">
+                        <textarea id="description" class="form-control" rows="2"
+                                  placeholder="Please type here"></textarea>
+                        <div class="mar-top clearfix">
+                            <button id="btn-post-activity"
+                                    class="btn btn-sm btn-primary pull-right" type="button">
+                                <i class="fa fa-pencil fa-fw"></i>
+                                Post
+                            </button>
+
+                            <div class="file-path-wrapper">
+                                <input type="file" name="file" id="file" multiple>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-body">
+                    <!-- Newsfeed Content -->
+                    <!--===================================================-->
+                    <div class="media-block">
+                        <div class="media-body">
+
+                            <hr>
+                            <!-- Comments -->
+
+
+                            {% for activity in support_activity_data %}
+
+
+                                <div>
+                                <div class="media-block">
+                                    <a class="media-left" href="#">
+                                        <img class="img-circle img-sm" alt="Profile Picture"
+                                             src="https://bootdey.com/img/Content/avatar/avatar2.png"></a>
+                                    <div class="media-body">
+                                        <div class="mar-btm">
+                                            <a href="#" class="btn-link text-semibold media-heading box-inline">
+                                                {{ activity.created_by.first_name }}
+                                            </a>
+                                            <p class="text-muted text-sm"><i class="fa fa-clock-o fa-lg"></i>
+                                                {{ activity.created_at | timesince }} ago
+                                            </p>
+
+                                        </div>
+                                        <p>{{ activity.description }}</p>
+
+                                        <p>
+
+                                            {% for f in activity.supportrequestactivityfiles_set.all %}
+                                                <a target="_blank" class="activity_file_link" href="{{ f.file.url }}"
+                                                   style="margin-right: 15px">
+                                                    File-{{ forloop.counter }}
+                                                </a>
+                                            {% endfor %}
+
+                                        </p>
+
+                                        <hr>
+                                    </div>
+
+
+                                </div>
+
+
+                            {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+    <script>
+
+        $("#btn-post-activity").click(function () {
+
+            var this_btn = $(this);
+            this_btn.prop("disabled", true);
+
+            var description = $("#description").val();
+            var request_id = $("#support_request_id").val();
+
+            var form_data = new FormData();
+            $.each($("#file")[0].files, function (i, file) {
+                form_data.append("file", file);
+            });
+
+            form_data.append("description", description)
+            form_data.append("request_id", request_id)
+            form_data.append("csrfmiddlewaretoken", "{{ csrf_token }}")
+
+            $.ajax({
+                url: "{% url 'post_support_activity' %}",
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,
+                type: 'POST',
+
+                success: function (data) {
+
+                    this_btn.prop("disabled", false);
+
+                    if (data.status === 'success')
+                        $('.alert-success').show().html(data.msg).delay(5000).fadeOut('slow');
+                    else
+                        $('.alert-danger').show().html(data.msg).delay(5000).fadeOut('slow');
+
+                    setTimeout(function () {
+                        location.reload()
+                    }, 2000)
+                },
+
+                failure: function () {
+                    $('.alert-danger').show().html("Something went wrong. Please try again").delay(5000).fadeOut('slow');
+                }
+
+
+            });
+
+        })
+
+    </script>
+
+{% endblock javascript %}

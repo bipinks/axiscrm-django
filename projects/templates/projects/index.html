@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="m-3" style="text-align:left">
+        <h4>All Projects</h4>
+    </div>
+
+    <div class="row">
+
+        {% for project in projects %}
+            <div class="card" style="width: 18rem; margin: 2px; ">
+                <div class="text-center mt-2">
+                    <img style="width: 200px; max-height: 60px;text-align: center" src="{{ project.logo.url }}"
+                         class="card-img-top"
+                         alt="...">
+
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{ project.name }}</h5>
+                    <p class="card-text text-center">{{ project.description|truncatechars:150 }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-center">Total Clients: {{ project.clientproject_set.all|length }}</li>
+                    <li class="list-group-item text-center">
+                        <a href="{% url 'projects_view_project_clients' project.id %}" class="btn btn-primary btn-sm">Show
+                            Clients</a></li>
+                </ul>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endblock content %}

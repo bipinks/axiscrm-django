@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+    <style>
+        .dropdown-toggle {
+            width: 100%;
+        }
+
+    </style>
+
+
+    <div class="mt-3" style="text-align:left">
+        <h4>All Support Requests</h4>
+    </div>
+    <hr>
+
+    <div class="row">
+
+
+        <div class="row justify-content-center d-flex align-items-center text-center">
+
+            <form class="row gx-3 gy-2 align-items-center mb-3" style="text-align: left">
+                <div class="col-sm-3">
+                    <label for="specificSizeInputName">Date From:</label>
+                    <div class="input-group date datepicker" data-date-format="yyyy-mm-dd">
+                        <input class="form-control" value="{{ request.GET.from_date|default:current_date }}"
+                               name="from_date" type="text" readonly/>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="specificSizeInputName">Date To:</label>
+                    <div class="input-group date datepicker" data-date-format="yyyy-mm-dd">
+                        <input class="form-control" value="{{ request.GET.to_date|default:current_date }}"
+                               name="to_date" type="text" readonly/>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="specificSizeInputName">Project:</label>
+                    <select class="form-select" name="project" aria-label="Default select example">
+                        <option value="">Choose a project</option>
+                        {% for project in all_projects %}
+
+                            <option
+                                    {% if request.GET.project == project.id|stringformat:"i" %}
+                                        {{ 'selected' }}
+                                    {% endif %}
+                                    value="{{ project.id }}">{{ project.name }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="specificSizeInputName">Client:</label>
+                    <select class="form-select" name="client" aria-label="Default select example">
+                        <option value="">Choose a client</option>
+                        {% for client in all_clients %}
+                            <option
+                                    {% if request.GET.client == client.id|stringformat:"i" %}
+                                        {{ 'selected' }}
+                                    {% endif %}
+                                    value="{{ client.id }}">{{ client.name }}</option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+
+
+            <table class="table table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col" style="width: 18%">DateTime</th>
+                    <th scope="col" style="width: 25%">Title</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Client Project</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" style="width: 25%">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for req in support_requests_data %}
+                    <tr class="text-center">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ req.created_at }}</td>
+                        <td>{{ req.title|safe|truncatechars:150 }}</td>
+                        <td>{{ req.client_project.client.name }}</td>
+                        <td>{{ req.client_project.project.name }}</td>
+                        <td>{{ req.get_status_display }}</td>
+                        <td>
+
+                            <div class="row">
+
+                                <div class="dropdown col-md-6">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item"
+                                               href="{% url 'clients_view_support_request' req.id %}">Show</a></li>
+                                        <li><a class="dropdown-item delete-req"
+                                               href="{% url 'delete_support_ticket' req.id %}">Delete</a></li>
+                                    </ul>
+                                </div>
+
+
+                                <div class="dropdown col-md-6">
+                                    <button class="btn btn-warning btn-sm dropdown-toggle" type="button"
+                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ req.get_status_display | truncatechars:10 }}
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+
+                                        {% for key,val in ticket_status_dict %}
+                                            <li><a data-status="{{ key }}" data-status="{{ key }}"
+                                                   class="dropdown-item ticket_status
+                                            {% if req.status == key %}
+                                                {{ 'active' }}
+                                            {% endif %}"
+                                                   href="{% url 'update_support_ticket' req.id %}">{{ val }}</a></li>
+                                        {% endfor %}
+
+                                    </ul>
+                                </div>
+
+                            </div>
+
+
+                        </td>
+
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+
+            <div class="pagination justify-content-center">
+
+                <ul class="pagination">
+
+                    {#                    {% if support_requests_data.has_other_pages %}#}
+
+
+                    {% if support_requests_data.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page=1">First</a></li>
+
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ support_requests_data.previous_page_number }}">previous</a></li>
+
+                    {% endif %}
+
+                    {% for i in support_requests_data.paginator.page_range %}
+                        {% if support_requests_data.number == i %}
+
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link"
+                                   href="?page={{ i }}">{{ i }}</a></li>
+
+                        {% else %}
+
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if support_requests_data.has_next %}
+
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ support_requests_data.next_page_number }}">NEXT</a></li>
+
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ support_requests_data.end_index }}">LAST</a></li>
+
+                    {% endif %}
+
+                    {#{% endif %}#}
+                </ul>
+
+
+                <span class="current">
+
+{#                    <li class="page-item active" aria-current="page">#}
+{#                            <a class="page-link"#}
+{#                               href="#">{{ support_requests_data.number }}</a></li>#}
+
+{#                    Page {{ support_requests_data.number }} of {{ support_requests_data.paginator.num_pages }}#}
+                </span>
+
+
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+    <script>
+
+        $(function () {
+            $(".datepicker").datepicker({
+                autoclose: true,
+                todayHighlight: true
+            })
+        });
+
+    </script>
+
+
+    <script>
+
+
+        $(document).on("click", ".delete-req", function (e) {
+
+            e.preventDefault();
+            var url = $(this).attr("href")
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                type: 'post',
+
+                success: function (data) {
+                    alert(data.msg);
+                    location.reload()
+                }
+            })
+
+        });
+
+
+        $(document).on("click", ".ticket_status", function (e) {
+
+            e.preventDefault();
+            var url = $(this).attr("href")
+            var status = $(this).data("status")
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                data: {
+                    status: status,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                type: 'post',
+
+                success: function (data) {
+                    alert(data.msg);
+                    location.reload()
+                }
+            })
+
+        });
+
+
+    </script>
+
+
+
+{% endblock javascript %}

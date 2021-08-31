@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="mt-3" style="text-align:left">
+        <h4>Raise a new Ticket</h4>
+    </div>
+
+    <hr>
+
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 200px;
+        }
+    </style>
+    <div class="row">
+
+        <div class="alert alert-success" role="alert" style="display: none">
+
+        </div>
+        <div class="alert alert-danger" role="alert" style="display: none">
+
+        </div>
+
+
+        <form id="newTicketForm" method="post" enctype="multipart/form-data" action="">
+
+            {% csrf_token %}
+            <input type="hidden" name="client_project" value="{{ client_project_id }}">
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Please provide a title:</label>
+                <input type="text" name="title" class="form-control" id="title">
+                <div id="titleHelp" class="form-text">Brief a few about your ticket.</div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Explain your issue here:</label>
+                <textarea class="form-control" name="description" id="description"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="files" class="form-label">Upload Screenshots (Optional):</label>
+                <input type="file" name="files" id="files" multiple>
+            </div>
+
+            <button type="submit" id="btn-submit" class="btn btn-primary btn-sm">Submit</button>
+        </form>
+
+    </div>
+
+{% endblock content %}
+
+{% block javascript %}
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/10.0.1/classic/ckeditor.js"></script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
+
+    <script>
+
+
+        $("form#newTicketForm").submit(function (e) {
+            e.preventDefault();
+
+            var this_btn = $("#btn-submit");
+            this_btn.prop("disabled", true);
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: window.location.pathname,
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    this_btn.prop("disabled", false);
+
+                    if (data.status === 'success')
+                        $('.alert-success').show().html(data.msg).delay(5000).fadeOut('slow');
+                    else
+                        $('.alert-danger').show().html(data.msg).delay(5000).fadeOut('slow');
+
+                    setTimeout(function () {
+                        window.location.href = "/clients/support_request/" + data.id
+                    }, 2000)
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+
+
+    </script>
+
+
+
+
+
+{% endblock javascript %}

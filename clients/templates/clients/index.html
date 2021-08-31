@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% load custom_tags %}
+
+{% block content %}
+
+    <div class="mt-3" style="text-align:left">
+        <h4>All Clients</h4>
+    </div>
+
+    <div class="row" style="">
+
+
+        {% for client in clients %}
+
+
+            <div class="card col-sm-4 mb-3" style="width: 33%;margin-right: 3px;">
+                <div class="row ">
+                    <div class="col-md-4 justify-content-center d-flex align-items-center">
+                        <img src="https://axisproerp.com/images/axispro.png" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ client.name }}</h5>
+                            <p class="card-text">{{ client.email }}</p>
+                            <p class="card-text">
+                                <a href="{% url 'project_view_client_projects' client.id %}"
+                                   class="btn btn-primary btn-sm">
+                                    Show All Projects</a>
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <ul class="list-group list-group-flush" style="border-top: 1px solid #ccc;">
+                        <li class="list-group-item">
+                            <span>Total Projects:{{client.clientproject_set.all|length}}</span>
+                            <span style="float: right">Total Tickets:
+                                {{ client.total_tickets }}
+                            </span>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endblock content %}
