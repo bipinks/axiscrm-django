@@ -14,8 +14,8 @@
         <div class="card-body">
             <h5 class="card-title">Total Projects -  {{ projects_count }}</h5>
             <hr>
-            <p class="card-text">{{ assigned_projects_count }} Projects are active</p>
-            <p class="card-text">{{ unassigned_projects_count }} Projects are not unassigned with clients</p>
+            <p class="card-text">{{ assigned_projects_count }} Project(s) are active</p>
+            <p class="card-text">{{ unassigned_projects_count }} Project(s) are unassigned with clients</p>
         </div>
     </div>
     <div class="card text-white bg-secondary m-1" style="max-width: 18rem;">
@@ -24,7 +24,7 @@
             <h5 class="card-title">Total Clients  -  {{ clients_count }}</h5>
             <hr>
             <p class="card-text">{{ assigned_clients_count }} of them are active</p>
-            <p class="card-text">{{ unassigned_clients_count }} of them are not unassigned with projects</p>
+            <p class="card-text">{{ unassigned_clients_count }} of them are unassigned with projects</p>
         </div>
     </div>
     <div class="card text-white bg-success m-1" style="max-width: 18rem;">
@@ -32,8 +32,8 @@
         <div class="card-body">
             <h5 class="card-title">Due Today - {{ amc_due_today_count }} </h5>
             <hr>
-            <p class="card-text">{{ upcoming_amc_count }} Projects will be due with in 1 month</p>
-            <p class="card-text">{{ overdue_amc_count }} Projects are overdue</p>
+            <p class="card-text">{{ upcoming_amc_count }} Project(s) will be due with in 1 month</p>
+            <p class="card-text">{{ overdue_amc_count }} Project(s) are overdue</p>
         </div>
     </div>
     <div class="card text-white bg-danger m-1" style="max-width: 18rem;">
