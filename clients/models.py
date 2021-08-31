@@ -1,18 +1,17 @@
 from datetime import datetime, timedelta
 
+from crum import get_current_user
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models, connection
-from crum import get_current_user
-
 # Create your models here.
-from django.db.models import Max
 from django.utils import timezone
 
 
 class Client(models.Model):
     class Meta:
         db_table = 'clients'
+        verbose_name_plural = "Manage Clients"
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255)
@@ -20,7 +19,7 @@ class Client(models.Model):
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    logo = models.FileField(null=True, blank=True, upload_to='clients/')
+    logo = models.FileField(null=True, blank=True, upload_to='clients/', default='client_default.png')
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -68,6 +67,7 @@ def date_next_year():
 class ClientProject(models.Model):
     class Meta:
         db_table = 'client_projects'
+        verbose_name_plural = "Client Projects"
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     project = models.ForeignKey("projects.Project", on_delete=models.CASCADE)
@@ -106,6 +106,7 @@ class ClientProject(models.Model):
 class ClientProjectDocument(models.Model):
     class Meta:
         db_table = 'client_project_documents'
+        verbose_name_plural = "Manage Client Project Documents"
 
     client_project = models.ForeignKey(ClientProject, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField()
@@ -128,7 +129,7 @@ TICKET_STATUS = (
     ('1', 'Open'),
     ('2', 'Awaiting Business Inputs'),
     ('3', 'With Client Review'),
-    ('4', 'Closed'),
+    ('4', 'Closed|Resolved'),
     ('5', 'Deferred'),
 )
 
@@ -136,6 +137,7 @@ TICKET_STATUS = (
 class SupportRequest(models.Model):
     class Meta:
         db_table = 'support_requests'
+        verbose_name_plural = "Support Requests"
 
     ticket_no = models.CharField(max_length=255)
     client_project = models.ForeignKey(ClientProject, on_delete=models.CASCADE)
@@ -170,6 +172,7 @@ class SupportRequest(models.Model):
 class SupportRequestFiles(models.Model):
     class Meta:
         db_table = 'support_request_files'
+        verbose_name_plural = "Support Request Files"
 
     support_request = models.ForeignKey(SupportRequest, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(default=datetime.now, blank=True)
@@ -179,6 +182,7 @@ class SupportRequestFiles(models.Model):
 class SupportActivity(models.Model):
     class Meta:
         db_table = 'support_activities'
+        verbose_name_plural = "Support Request Activities"
 
     support_request = models.ForeignKey(SupportRequest, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=datetime.now, blank=True)
@@ -197,6 +201,7 @@ class SupportActivity(models.Model):
 class SupportRequestActivityFiles(models.Model):
     class Meta:
         db_table = 'support_request_activity_files'
+        verbose_name_plural = "Support Request Activity Files"
 
     activity = models.ForeignKey(SupportActivity, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(default=datetime.now, blank=True)
