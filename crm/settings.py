@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6_^8*(tb5ejtt#+2h$fa*yt9@1pc$^!vskx-3k$mr3@d57jmd1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["crm.daxis.axispro.xyz"]
 
 
 # Application definition
@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'crm.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_django_axiscrm',
+        'NAME': 'django_crm',
         'USER': 'root',
-        'PASSWORD': 'Daxis@217',
-        'HOST': '192.168.1.2',
-        'PORT': '3307',
+        'PASSWORD': 'puGewUHUMWe5',
+        'HOST': 'staging.axispro.xyz',
+        'PORT': '3306',
     }
 }
 
