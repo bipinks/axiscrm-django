@@ -32,7 +32,7 @@ def index(request):
         upcoming_amc_count = ClientProject.objects.filter(next_amc_date__range=[today, end_date]).count()
 
         amc_due_today_count = ClientProject.objects.filter(next_amc_date=today).count()
-        overdue_amc_count = ClientProject.objects.filter(next_amc_date__gt=today).count()
+        overdue_amc_count = ClientProject.objects.filter(next_amc_date__lt=today).count()
 
         # print(overdue_amc_count.query)
 
