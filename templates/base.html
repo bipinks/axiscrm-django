@@ -25,6 +25,10 @@
                         <a class="nav-link" href="{% url 'clients_all_support_requests' %}">Support Requests</a>
                     </li>
 
+                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'amc_list_all' %}">AMC Renewal List</a>
+                    </li>
+
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'home_client_dashboard' %}">Home</a>

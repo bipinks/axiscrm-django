@@ -13,7 +13,7 @@ class Project(models.Model):
 
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    description = models.TextField()
     logo = models.FileField(null=True, blank=True, upload_to='projects/', default='clients/project_default.png')
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,

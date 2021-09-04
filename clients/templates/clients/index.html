@@ -14,7 +14,7 @@
         {% for client in clients %}
 
 
-            <div class="card col-sm-4 mb-3" style="width: 33%;margin-right: 3px;">
+            <div class="card col-sm-4 mb-3" >
                 <div class="row ">
                     <div class="col-md-4 justify-content-center d-flex align-items-center">
                         <img src="{{ client.logo.url }}" class="img-fluid rounded-start" alt="...">
@@ -44,6 +44,9 @@
 
                 </div>
             </div>
+
+            {% empty %}
+            <li>There are no clients</li>
 
         {% endfor %}
 

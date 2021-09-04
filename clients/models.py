@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from ckeditor.fields import RichTextField
 from crum import get_current_user
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -19,7 +20,7 @@ class Client(models.Model):
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    logo = models.FileField(null=True, blank=True, upload_to='clients/', default='clients/client_default.png')
+    logo = models.ImageField(null=True, blank=True, upload_to='clients/', default='clients/client_default.png')
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -100,7 +101,7 @@ class ClientProject(models.Model):
         super(ClientProject, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.project.name
+        return self.client.name + " | " + self.project.name
 
 
 class ClientProjectDocument(models.Model):
@@ -153,9 +154,16 @@ class SupportRequest(models.Model):
 
     status = models.CharField(max_length=255, choices=TICKET_STATUS, default='0')
 
+    @property
+    def created_by_logo(self):
+        if self.created_by.is_staff:
+            return "https://i.imgur.com/iNmBizf.jpg"
+
+        else:
+            return self.created_by.client.logo.url
+
     def save(self, *args, **kwargs):
         self.created_by = get_current_user()
-        super(SupportRequest, self).save(*args, **kwargs)
 
         if not self.ticket_no:
             ticket_cnt = SupportRequest.objects.filter(client_project=self.client_project).count()
@@ -164,6 +172,7 @@ class SupportRequest(models.Model):
 
             self.ticket_no = "TICKET/" + project_code + "/" + client_code + "/" + str(ticket_cnt + 1)
             self.save()
+        super(SupportRequest, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.ticket_no
@@ -192,6 +201,13 @@ class SupportActivity(models.Model):
         on_delete=models.CASCADE,
         null=True
     )
+
+    @property
+    def created_by_logo(self):
+        if self.created_by.is_staff:
+            return "https://i.imgur.com/iNmBizf.jpg"
+        else:
+            return self.created_by.client.logo.url
 
     def save(self, *args, **kwargs):
         self.created_by = get_current_user()

@@ -2,54 +2,150 @@
 
 {% block content %}
 
+    <style>
 
-<div class="m-3" style="text-align:center">
-    <h2>Welcome to Axis - CRM</h2>
-</div>
+        .card {
+            height: 300px;
+        }
+    </style>
 
-<div class="row">
-
-    <div class="card text-white bg-primary m-1" style="max-width: 18rem;">
-        <div class="card-header">Projects</div>
-        <div class="card-body">
-            <h5 class="card-title">Total Projects -  {{ projects_count }}</h5>
-            <hr>
-            <p class="card-text">{{ assigned_projects_count }} Project(s) are active</p>
-            <p class="card-text">{{ unassigned_projects_count }} Project(s) are unassigned with clients</p>
-        </div>
-    </div>
-    <div class="card text-white bg-secondary m-1" style="max-width: 18rem;">
-        <div class="card-header">Clients</div>
-        <div class="card-body">
-            <h5 class="card-title">Total Clients  -  {{ clients_count }}</h5>
-            <hr>
-            <p class="card-text">{{ assigned_clients_count }} of them are active</p>
-            <p class="card-text">{{ unassigned_clients_count }} of them are unassigned with projects</p>
-        </div>
-    </div>
-    <div class="card text-white bg-success m-1" style="max-width: 18rem;">
-        <div class="card-header">AMC Renewal</div>
-        <div class="card-body">
-            <h5 class="card-title">Due Today - {{ amc_due_today_count }} </h5>
-            <hr>
-            <p class="card-text">{{ upcoming_amc_count }} Project(s) will be due with in 1 month</p>
-            <p class="card-text">{{ overdue_amc_count }} Project(s) are overdue</p>
-        </div>
-    </div>
-    <div class="card text-white bg-danger m-1" style="max-width: 18rem;">
-        <div class="card-header">Support Tickets</div>
-        <div class="card-body">
-            <h5 class="card-title">Total Tickets - {{ total_ticket_count }}</h5>
-            <hr>
-            <p class="card-text">Resolved : {{ resolved_ticket_count }}</p>
-            <p class="card-text">Progress : {{ in_progress_ticket_count }}</p>
-            <p class="card-text">Waiting for review : {{ with_client_review_ticket_count }}</p>
-        </div>
+    <div class="m-3" style="text-align:center">
+        <h2>Welcome to Axis - CRM</h2>
     </div>
 
-</div>
+
+    <div class="row justify-content-center d-flex align-items-center">
+
+        <div class="card text-white bg-primary m-1" style="max-width: 18rem;">
+            <div class="card-header">Projects</div>
+            <div class="card-body">
+                <h5 class="card-title">Total Projects - {{ projects_count }}</h5>
+                <hr>
+                <p class="card-text">{{ assigned_projects_count }} Project(s) are active</p>
+                <p class="card-text">{{ unassigned_projects_count }} Project(s) are unassigned with clients</p>
+            </div>
+        </div>
+        <div class="card text-white bg-secondary m-1" style="max-width: 18rem;">
+            <div class="card-header">Clients</div>
+            <div class="card-body">
+                <h5 class="card-title">Total Clients - {{ clients_count }}</h5>
+                <hr>
+                <p class="card-text">{{ assigned_clients_count }} of them are active</p>
+                <p class="card-text">{{ unassigned_clients_count }} of them are unassigned with projects</p>
+            </div>
+        </div>
+        <div class="card text-white bg-success m-1" style="max-width: 18rem;">
+            <div class="card-header">AMC Renewal</div>
+            <div class="card-body">
+                <h5 class="card-title">Due Today - {{ amc_due_today_count }} </h5>
+                <hr>
+                <p class="card-text">{{ upcoming_amc_count }} Project(s) will be due with in 1 month</p>
+                <p class="card-text">{{ overdue_amc_count }} Project(s) are overdue</p>
+            </div>
+        </div>
+        <div class="card text-white bg-danger m-1" style="max-width: 18rem;">
+            <div class="card-header">Support Tickets</div>
+            <div class="card-body">
+                <h5 class="card-title">Total Tickets - {{ total_ticket_count }}</h5>
+                <hr>
+                <p class="card-text">Resolved : {{ resolved_ticket_count }}</p>
+                <p class="card-text">Progress : {{ in_progress_ticket_count }}</p>
+                <p class="card-text">Waiting for review : {{ with_client_review_ticket_count }}</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <canvas id="line-chart" width="800" height="450"></canvas>
+        </div>
+
+        <div class="col-md-6">
+            <canvas id="bar-chart" width="800" height="450"></canvas>
+        </div>
+
+    </div>
+
+
 
 
 {% endblock content %}
+
+{% block javascript %}
+    <script src="https://cdn.ckeditor.com/ckeditor5/10.0.1/classic/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+    <script>
+
+        new Chart(document.getElementById("line-chart"), {
+            type: 'line',
+            data: {
+                labels: [0, 100, 200, 300, 400, 500, 600, 700, 800, 900],
+                datasets: [
+                    {
+                        data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
+                        label: "Africa",
+                        borderColor: "#3e95cd",
+                        fill: false
+                    }, {
+                        data: [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267],
+                        label: "Asia",
+                        borderColor: "#8e5ea2",
+                        fill: false
+                    }, {
+                        data: [168, 170, 178, 190, 203, 276, 408, 547, 675, 734],
+                        label: "Europe",
+                        borderColor: "#3cba9f",
+                        fill: false
+                    }, {
+                        data: [40, 20, 10, 16, 24, 38, 74, 167, 508, 784],
+                        label: "Latin America",
+                        borderColor: "#e8c3b9",
+                        fill: false
+                    }, {
+                        data: [6, 3, 2, 2, 7, 26, 82, 172, 312, 433],
+                        label: "North America",
+                        borderColor: "#c45850",
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Support Tickets per project'
+                }
+            }
+        });
+
+
+        // Bar chart
+        new Chart(document.getElementById("bar-chart"), {
+            type: 'bar',
+            data: {
+                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+                datasets: [
+                    {
+                        label: "Population (millions)",
+                        backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                        data: [2478, 5267, 734, 784, 433]
+                    }
+                ]
+            },
+            options: {
+                legend: {display: false},
+                title: {
+                    display: true,
+                    text: 'AMC Renewals per month'
+                }
+            }
+        });
+
+
+    </script>
+
+{% endblock javascript %}
 
 

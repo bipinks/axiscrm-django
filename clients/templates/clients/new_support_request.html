@@ -23,21 +23,24 @@
         </div>
 
 
-        <form id="newTicketForm" method="post" enctype="multipart/form-data" action="">
+        <form id="newTicketForm" method="post" enctype="multipart/form-data" action="" novalidate>
 
             {% csrf_token %}
-            <input type="hidden" name="client_project" value="{{ client_project_id }}">
 
-            <div class="mb-3">
-                <label for="title" class="form-label">Please provide a title:</label>
-                <input type="text" name="title" class="form-control" id="title">
-                <div id="titleHelp" class="form-text">Brief a few about your ticket.</div>
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Explain your issue here:</label>
-                <textarea class="form-control" name="description" id="description"></textarea>
-            </div>
+            {{ form.as_p }}
 
+            {#            <input type="hidden" name="client_project" value="{{ client_project_id }}">#}
+            {##}
+            {#            <div class="mb-3">#}
+            {#                <label for="title" class="form-label">Please provide a title:</label>#}
+            {#                <input type="text" name="title" class="form-control" id="title">#}
+            {#                <div id="titleHelp" class="form-text">Brief a few about your ticket.</div>#}
+            {#            </div>#}
+            {#            <div class="mb-3">#}
+            {#                <label for="description" class="form-label">Explain your issue here:</label>#}
+            {#                <textarea class="form-control" name="description" id="description"></textarea>#}
+            {#            </div>#}
+            {##}
             <div class="mb-3">
                 <label for="files" class="form-label">Upload Screenshots (Optional):</label>
                 <input type="file" name="files" id="files" multiple>
@@ -56,7 +59,18 @@
 
     <script>
         ClassicEditor
-            .create(document.querySelector('#description'))
+            .create(document.querySelector('#id_description'), {
+                removePlugins: [
+                    'CKFinderUploadAdapter',
+                    'CKFinder',
+                    'EasyImage',
+                    'Image',
+                    'ImageCaption',
+                    'ImageStyle',
+                    'ImageToolbar',
+                    'ImageUpload',
+                    'MediaEmbed'],
+            })
             .catch(error => {
                 console.error(error);
             });
@@ -81,14 +95,17 @@
                 success: function (data) {
                     this_btn.prop("disabled", false);
 
-                    if (data.status === 'success')
-                        $('.alert-success').show().html(data.msg).delay(5000).fadeOut('slow');
-                    else
-                        $('.alert-danger').show().html(data.msg).delay(5000).fadeOut('slow');
+                    if (data.status === 'success') {
 
-                    setTimeout(function () {
-                        window.location.href = "/clients/support_request/" + data.id
-                    }, 2000)
+                        setTimeout(function () {
+                            window.location.href = "/clients/support_request/" + data.id
+                        }, 2000)
+
+                        $('.alert-success').show().html(data.msg).delay(5000).fadeOut('slow');
+                    } else {
+                        $('.alert-danger').show().html(data.msg).delay(5000).fadeOut('slow');
+                    }
+
                 },
                 cache: false,
                 contentType: false,
