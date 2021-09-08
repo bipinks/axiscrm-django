@@ -5,48 +5,43 @@
     <style>
 
         .card {
-            height: 300px;
+            height: 220px;
         }
     </style>
 
-    <div class="m-3" style="text-align:center">
-        <h2>Welcome to Axis - CRM</h2>
-    </div>
+    <div class="row">
 
-
-    <div class="row justify-content-center d-flex align-items-center">
-
-        <div class="card text-white bg-primary m-1" style="max-width: 18rem;">
+        <div class="card text-white bg-primary m-1" style="max-width: 28%">
             <div class="card-header">Projects</div>
             <div class="card-body">
-                <h5 class="card-title">Total Projects - {{ projects_count }}</h5>
+                <h5 class="card-title text-white">Total Projects - {{ projects_count }}</h5>
                 <hr>
                 <p class="card-text">{{ assigned_projects_count }} Project(s) are active</p>
                 <p class="card-text">{{ unassigned_projects_count }} Project(s) are unassigned with clients</p>
             </div>
         </div>
-        <div class="card text-white bg-secondary m-1" style="max-width: 18rem;">
+        <div class="card text-white bg-secondary m-1" style="max-width: 28%;">
             <div class="card-header">Clients</div>
             <div class="card-body">
-                <h5 class="card-title">Total Clients - {{ clients_count }}</h5>
+                <h5 class="card-title text-white">Total Clients - {{ clients_count }}</h5>
                 <hr>
                 <p class="card-text">{{ assigned_clients_count }} of them are active</p>
                 <p class="card-text">{{ unassigned_clients_count }} of them are unassigned with projects</p>
             </div>
         </div>
-        <div class="card text-white bg-success m-1" style="max-width: 18rem;">
+        <div class="card text-white bg-success m-1" style="max-width: 28%;">
             <div class="card-header">AMC Renewal</div>
             <div class="card-body">
-                <h5 class="card-title">Due Today - {{ amc_due_today_count }} </h5>
+                <h5 class="card-title text-white">Due Today - {{ amc_due_today_count }} </h5>
                 <hr>
                 <p class="card-text">{{ upcoming_amc_count }} Project(s) will be due with in 1 month</p>
                 <p class="card-text">{{ overdue_amc_count }} Project(s) are overdue</p>
             </div>
         </div>
-        <div class="card text-white bg-danger m-1" style="max-width: 18rem;">
+        <div class="card text-white bg-danger m-1" style="max-width: 28%;">
             <div class="card-header">Support Tickets</div>
             <div class="card-body">
-                <h5 class="card-title">Total Tickets - {{ total_ticket_count }}</h5>
+                <h5 class="card-title text-white">Total Tickets - {{ total_ticket_count }}</h5>
                 <hr>
                 <p class="card-text">Resolved : {{ resolved_ticket_count }}</p>
                 <p class="card-text">Progress : {{ in_progress_ticket_count }}</p>
@@ -68,14 +63,10 @@
 
     </div>
 
-
-
-
 {% endblock content %}
 
 {% block javascript %}
-    <script src="https://cdn.ckeditor.com/ckeditor5/10.0.1/classic/ckeditor.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
 
     <script>
 

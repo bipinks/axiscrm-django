@@ -10,8 +10,8 @@
     </style>
 
 
-    <div class="mt-3" style="text-align:left">
-        <h4>AMC Renewals</h4>
+    <div style="text-align:left">
+        <h4>AMC Renewals <a href="{% url 'amc_create' %}" class="btn btn-md btn-facebook">Create</a></h4>
     </div>
     <hr>
 
@@ -22,7 +22,7 @@
 
             <form class="row gx-3 gy-2 align-items-center mb-3" style="text-align: left">
                 <div class="col-sm-3">
-                    <label for="specificSizeInputName">Date From:</label>
+                    <label for="specificSizeInputName">Renewal Date From:</label>
                     <div class="input-group date datepicker" data-date-format="yyyy-mm-dd">
                         <input class="form-control" value="{{ request.GET.from_date|default:"2000-01-01" }}"
                                name="from_date" type="text" readonly/>
@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="col-sm-3">
-                    <label for="specificSizeInputName">Date To:</label>
+                    <label for="specificSizeInputName">Renewal Date To:</label>
                     <div class="input-group date datepicker" data-date-format="yyyy-mm-dd">
                         <input class="form-control" value="{{ request.GET.to_date|default:current_date }}"
                                name="to_date" type="text" readonly/>
@@ -82,13 +82,15 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col" style="width: 16%">Date</th>
-                    <th scope="col" style="width: 16%">Reference</th>
+                    <th scope="col" style="width: 10%">Start Date</th>
+                    <th scope="col" style="width: 10%">End Date</th>
+                    <th scope="col" style="width: 10%">Renewed Date</th>
+                    <th scope="col" style="width: 10%">Reference</th>
                     <th scope="col">Project</th>
                     <th scope="col">Client</th>
                     <th scope="col">Amount</th>
                     <th scope="col">Description</th>
-                    <th scope="col" >Action</th>
+                    <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -96,7 +98,9 @@
                 {% for obj in data %}
                     <tr class="text-center">
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ obj.date }}</td>
+                        <td>{{ obj.start_date }}</td>
+                        <td>{{ obj.end_date }}</td>
+                        <td>{{ obj.renewed_date }}</td>
                         <td>{{ obj.reference }}</td>
                         <td>{{ obj.client_project.project.name }}</td>
                         <td>{{ obj.client_project.client.name }}</td>
@@ -107,7 +111,7 @@
                             <div class="row justify-content-center d-flex align-items-center">
 
                                 <div class="dropdown">
-                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                    <button class="btn btn-google btn-sm dropdown-toggle" type="button"
                                             id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                         Action
                                     </button>
@@ -125,7 +129,9 @@
                     </tr>
 
                 {% empty %}
-                    <tr><td colspan="5">There are no amc renewals</td></tr>
+                    <tr>
+                        <td colspan="5">There are no amc renewals</td>
+                    </tr>
 
                 {% endfor %}
 

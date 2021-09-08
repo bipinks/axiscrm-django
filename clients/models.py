@@ -16,7 +16,7 @@ class Client(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=255)
+    code = models.CharField(max_length=255,null=True, blank=True)
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
@@ -41,10 +41,12 @@ class Client(models.Model):
         return str(row[0])
 
     def save(self, *args, **kwargs):
+        # print(self)
+        # username = self.data.get('extra_field')
         self.created_by = get_current_user()
         super(Client, self).save(*args, **kwargs)
-
         if not self.code:
+            # and self._state.adding:
             self.code = "C" + str(self.id)
             self.save()
 

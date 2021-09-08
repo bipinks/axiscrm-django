@@ -2,16 +2,19 @@ from datetime import datetime
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.utils.dateformat import DateFormat
 from django.utils.decorators import method_decorator
-from django.views.generic import DeleteView, UpdateView
+from django.views.generic import DeleteView, UpdateView, CreateView, ListView
 
 from amc.models import AMCRenewal
+from lib.decorators import class_view_decorator
 from projects.models import Project
-from .forms import NewTicketForm
+from .forms import NewTicketForm, ClientForm
 from .models import Client, ClientProject, ClientProjectDocument, SupportRequest, SupportActivity, \
     SupportRequestActivityFiles, SupportRequestFiles, TICKET_STATUS
 
@@ -189,6 +192,7 @@ def new_ticket(request, client_project_id):
                   {'form': ticket_form, 'client_project_id': client_project_id})
 
 
+@class_view_decorator(staff_member_required)
 class SupportRequestDeleteView(DeleteView):
     model = SupportRequest
 
@@ -203,7 +207,7 @@ class SupportRequestDeleteView(DeleteView):
         return JsonResponse(payload)
 
 
-class SupportRequestUpdateView(UpdateView):
+class SupportRequestStatusUpdateView(UpdateView):
     model = SupportRequest
 
     @method_decorator(login_required)
@@ -217,3 +221,34 @@ class SupportRequestUpdateView(UpdateView):
             'msg': 'Support Ticket has been updated',
         }
         return JsonResponse(payload)
+
+
+@class_view_decorator(staff_member_required)
+class ClientCreateView(CreateView):
+    model = Client
+    form_class = ClientForm
+    template_name = 'common/basic-form.html'
+    success_url = reverse_lazy('clients_index')
+    extra_context = {'page_head': "New Client"}
+
+
+@class_view_decorator(staff_member_required)
+class ClientEditView(LoginRequiredMixin, UpdateView):
+    model = Client
+    form_class = ClientForm
+    template_name = 'common/basic-form.html'
+    success_url = reverse_lazy('clients_index')
+    extra_context = {'page_head': "Edit Client"}
+
+
+@class_view_decorator(staff_member_required)
+class ClientDeleteView(DeleteView):
+    model = Client
+    success_url = reverse_lazy('clients_index')
+
+
+@class_view_decorator(staff_member_required)
+class ClientListView(ListView):
+    model = Client
+    template_name = 'clients/list.html'
+    paginate_by = 10

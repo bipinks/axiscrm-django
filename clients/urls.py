@@ -1,9 +1,15 @@
 from django.urls import path
 from . import views
-from .views import SupportRequestDeleteView, SupportRequestUpdateView
+from .views import SupportRequestDeleteView, SupportRequestStatusUpdateView
 
 urlpatterns = [
     path('', views.index, name='clients_index'),
+
+    path('list/', views.ClientListView.as_view(), name='client_list'),
+    path('create/', views.ClientCreateView.as_view(), name='client_create'),
+    path('<pk>/update/', views.ClientEditView.as_view(), name='client_update'),
+    path('<pk>/delete/', views.ClientDeleteView.as_view(), name='client_delete'),
+
     path('view_project/<pk>/', views.project, name="clients_view_project"),
     path('support_request/<pk>/', views.support_request, name="clients_view_support_request"),
     path('save_activity', views.save_activity, name='post_support_activity'),
@@ -14,6 +20,6 @@ urlpatterns = [
     path('view_project/<client_project_id>/new_ticket/', views.new_ticket, name='clients_new_ticket'),
 
     path('<pk>/deleteTicket/', SupportRequestDeleteView.as_view(), name='delete_support_ticket'),
-    path('<pk>/updateTicket', SupportRequestUpdateView.as_view(), name='update_support_ticket'),
+    path('<pk>/updateTicket', SupportRequestStatusUpdateView.as_view(), name='update_support_ticket'),
 
 ]

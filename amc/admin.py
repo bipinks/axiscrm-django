@@ -5,7 +5,7 @@ from amc.models import AMCRenewal
 
 
 class AMCRenewalAdmin(admin.ModelAdmin):
-    list_display = ('client_name', 'project_name', 'date', 'amount', 'description')
+    list_display = ('client_name', 'project_name', 'start_date','end_date', 'amount', 'description')
     exclude = ('reference',)
 
     def client_name(self, obj):

@@ -1,0 +1,85 @@
+{% load static %}
+<nav id="sidebar" class="sidebar js-sidebar">
+        <div class="sidebar-content js-simplebar">
+            <a class="sidebar-brand" href="#">
+                <span class="align-middle">axisCRM</span>
+            </a>
+
+            <ul class="sidebar-nav">
+{#                <li class="sidebar-header">#}
+{#                    Menu#}
+{#                </li>#}
+
+                <li class="sidebar-item active">
+                    <a class="sidebar-link" href="{% url 'home_index' %}">
+                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                    </a>
+                </li>
+
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{% url 'projects_index' %}">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Projects</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{% url 'clients_index' %}">
+                        <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Clients</span>
+                    </a>
+                </li>
+
+
+                <li class="sidebar-header">
+                    Administration
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{% url 'client_list' %}">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Manage Clients</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{% url 'project_list' %}">
+                        <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Manage Projects</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{% url 'clients_all_support_requests' %}">
+                        <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Manage Support Tickets</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{% url 'amc_list_all' %}">
+                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">AMC Contracts</span>
+                    </a>
+                </li>
+
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{% url 'user_create' %}">
+                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">Users</span>
+                    </a>
+                </li>
+
+
+            </ul>
+
+            <div class="sidebar-cta">
+                <div class="sidebar-cta-content">
+                    <img src="{% static 'assets/images/daxis-logo.png' %}">
+{#                    <strong class="d-inline-block mb-2">Direct Axis Technology LLC</strong>#}
+                    <div class="mb-3 text-sm">
+                        <p class="text-center">www.directaxistech.com</p>
+{#                        <p>email: info@directaxistech.com</p>#}
+                    </div>
+                    <div class="d-grid">
+                        <a href="mailto:info@directaxistech.com" class="btn btn-primary">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
