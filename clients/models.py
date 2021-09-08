@@ -13,6 +13,7 @@ class Client(models.Model):
     class Meta:
         db_table = 'clients'
         verbose_name_plural = "Manage Clients"
+        ordering = ['-id']
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255)

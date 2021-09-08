@@ -13,6 +13,7 @@ class AMCRenewal(models.Model):
     class Meta:
         db_table = 'amc_renewals'
         verbose_name_plural = "Manage AMC Renewals"
+        ordering = ['-id']
 
     reference = models.CharField(max_length=255)
     client_project = models.ForeignKey(ClientProject, on_delete=models.CASCADE)
