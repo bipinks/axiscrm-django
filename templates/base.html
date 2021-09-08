@@ -1,80 +1,235 @@
-{% include "header.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background:#4779ab !important">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Axis-CRM</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+{% include 'header.html' %}
+
+<body>
+<div class="wrapper">
+
+    {% include 'side-nav.html' %}
+
+    <div class="main">
+
+        {% include 'top-nav.html' %}
+
+        <main class="content">
+            <div class="container-fluid p-0">
+
+                {#                <h1 class="h3 mb-1"><strong>Admin</strong> Dashboard</h1>#}
+
+                {#                <div class="row">#}
+                {#                    <div class="col-xl-6 col-xxl-5 d-flex">#}
+                {#                        <div class="w-100">#}
+                {#                            <div class="row">#}
+                {#                                <div class="col-sm-6">#}
+                {#                                    <div class="card">#}
+                {#                                        <div class="card-body">#}
+                {#                                            <div class="row">#}
+                {#                                                <div class="col mt-0">#}
+                {#                                                    <h5 class="card-title">Projects</h5>#}
+                {#                                                </div>#}
+                {##}
+                {#                                                <div class="col-auto">#}
+                {#                                                    <div class="stat text-primary">#}
+                {#                                                        <i class="align-middle" data-feather="truck"></i>#}
+                {#                                                    </div>#}
+                {#                                                </div>#}
+                {#                                            </div>#}
+                {#                                            <h1 class="mt-1 mb-3">2.382</h1>#}
+                {#                                            <div class="mb-0">#}
+                {#                                                <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>#}
+                {#                                                <span class="text-muted">Since last week</span>#}
+                {#                                            </div>#}
+                {#                                        </div>#}
+                {#                                    </div>#}
+                {#                                    <div class="card">#}
+                {#                                        <div class="card-body">#}
+                {#                                            <div class="row">#}
+                {#                                                <div class="col mt-0">#}
+                {#                                                    <h5 class="card-title">Clients</h5>#}
+                {#                                                </div>#}
+                {##}
+                {#                                                <div class="col-auto">#}
+                {#                                                    <div class="stat text-primary">#}
+                {#                                                        <i class="align-middle" data-feather="users"></i>#}
+                {#                                                    </div>#}
+                {#                                                </div>#}
+                {#                                            </div>#}
+                {#                                            <h1 class="mt-1 mb-3">14.212</h1>#}
+                {#                                            <div class="mb-0">#}
+                {#                                                <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>#}
+                {#                                                <span class="text-muted">Since last week</span>#}
+                {#                                            </div>#}
+                {#                                        </div>#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                                <div class="col-sm-6">#}
+                {#                                    <div class="card">#}
+                {#                                        <div class="card-body">#}
+                {#                                            <div class="row">#}
+                {#                                                <div class="col mt-0">#}
+                {#                                                    <h5 class="card-title">AMC</h5>#}
+                {#                                                </div>#}
+                {##}
+                {#                                                <div class="col-auto">#}
+                {#                                                    <div class="stat text-primary">#}
+                {#                                                        <i class="align-middle" data-feather="dollar-sign"></i>#}
+                {#                                                    </div>#}
+                {#                                                </div>#}
+                {#                                            </div>#}
+                {#                                            <h1 class="mt-1 mb-3">$21.300</h1>#}
+                {#                                            <div class="mb-0">#}
+                {#                                                <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>#}
+                {#                                                <span class="text-muted">Since last week</span>#}
+                {#                                            </div>#}
+                {#                                        </div>#}
+                {#                                    </div>#}
+                {#                                    <div class="card">#}
+                {#                                        <div class="card-body">#}
+                {#                                            <div class="row">#}
+                {#                                                <div class="col mt-0">#}
+                {#                                                    <h5 class="card-title">Tickets</h5>#}
+                {#                                                </div>#}
+                {##}
+                {#                                                <div class="col-auto">#}
+                {#                                                    <div class="stat text-primary">#}
+                {#                                                        <i class="align-middle" data-feather="shopping-cart"></i>#}
+                {#                                                    </div>#}
+                {#                                                </div>#}
+                {#                                            </div>#}
+                {#                                            <h1 class="mt-1 mb-3">64</h1>#}
+                {#                                            <div class="mb-0">#}
+                {#                                                <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>#}
+                {#                                                <span class="text-muted">Since last week</span>#}
+                {#                                            </div>#}
+                {#                                        </div>#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {##}
+                {#                    <div class="col-xl-6 col-xxl-7">#}
+                {#                        <div class="card flex-fill w-100">#}
+                {#                            <div class="card-header">#}
+                {##}
+                {#                                <h5 class="card-title mb-0">Recent Movement</h5>#}
+                {#                            </div>#}
+                {#                            <div class="card-body py-3">#}
+                {#                                <div class="chart chart-sm">#}
+                {#                                    <canvas id="chartjs-dashboard-line"></canvas>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="row">#}
+                {#                    <div class="col-12 col-md-6 col-xxl-3 d-flex order-2 order-xxl-3">#}
+                {#                        <div class="card flex-fill w-100">#}
+                {#                            <div class="card-header">#}
+                {##}
+                {#                                <h5 class="card-title mb-0">Browser Usage</h5>#}
+                {#                            </div>#}
+                {#                            <div class="card-body d-flex">#}
+                {#                                <div class="align-self-center w-100">#}
+                {#                                    <div class="py-3">#}
+                {#                                        <div class="chart chart-xs">#}
+                {#                                            <canvas id="chartjs-dashboard-pie"></canvas>#}
+                {#                                        </div>#}
+                {#                                    </div>#}
+                {##}
+                {#                                    <table class="table mb-0">#}
+                {#                                        <tbody>#}
+                {#                                        <tr>#}
+                {#                                            <td>Chrome</td>#}
+                {#                                            <td class="text-end">4306</td>#}
+                {#                                        </tr>#}
+                {#                                        <tr>#}
+                {#                                            <td>Firefox</td>#}
+                {#                                            <td class="text-end">3801</td>#}
+                {#                                        </tr>#}
+                {#                                        <tr>#}
+                {#                                            <td>IE</td>#}
+                {#                                            <td class="text-end">1689</td>#}
+                {#                                        </tr>#}
+                {#                                        </tbody>#}
+                {#                                    </table>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                    <div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">#}
+                {#                        <div class="card flex-fill w-100">#}
+                {#                            <div class="card-header">#}
+                {##}
+                {#                                <h5 class="card-title mb-0">Real-Time</h5>#}
+                {#                            </div>#}
+                {#                            <div class="card-body px-4">#}
+                {#                                <div id="world_map" style="height:350px;"></div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                    <div class="col-12 col-md-6 col-xxl-3 d-flex order-1 order-xxl-1">#}
+                {#                        <div class="card flex-fill">#}
+                {#                            <div class="card-header">#}
+                {##}
+                {#                                <h5 class="card-title mb-0">Calendar</h5>#}
+                {#                            </div>#}
+                {#                            <div class="card-body d-flex">#}
+                {#                                <div class="align-self-center w-100">#}
+                {#                                    <div class="chart">#}
+                {#                                        <div id="datetimepicker-dashboard"></div>#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
 
 
-                {% if request.user.is_superuser %}
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'home_index' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'projects_index' %}">Projects</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clients_index' %}">Clients</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clients_all_support_requests' %}">Support Requests</a>
-                    </li>
-
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'home_client_dashboard' %}">Home</a>
-                    </li>
-                {% endif %}
+                {% block content %}
+                {% endblock content %}
 
 
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
+            </div>
+        </main>
 
-                        {% if user.is_authenticated %}
-                            Welcome, {{ user.get_username }}
-                        {% else %}
-                            Log In
-                        {% endif %}
-
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-
-                        {% if user.is_authenticated %}
-                            <li><a class="dropdown-item" href="#">Something Here</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row text-muted">
+                    <div class="col-6 text-start">
+                        <p class="mb-0">
+                            <a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>Direct Axis Techology LLC</strong></a> &copy; 2021
+                        </p>
+                    </div>
+                    <div class="col-6 text-end">
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a class="text-muted" href="#" target="_blank">Contact Us</a>
                             </li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                        {% else %}
-                            <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-                        {% endif %}
-
-
-                    </ul>
-                </li>
-            </ul>
-        </div>
+                            <li class="list-inline-item">
+                                <a class="text-muted" href="#" target="_blank">www.directaxistech.com</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="text-muted" href="#" target="_blank">Our Projects</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="text-muted" href="#" target="_blank">Our Clients</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
-</nav>
-
-<div class="container">
-    {% block content %}
-    {% endblock content %}
 </div>
 
+{% include 'footer.html' %}
 
-{% include "footer.html" %}
+</body>
 
 {% block javascript %}  {% endblock javascript %}
 
-
-</body>
 </html>

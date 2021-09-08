@@ -1,23 +1,22 @@
-import json
-import time
-import calendar
 from datetime import datetime
-from pprint import pprint
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.utils.dateformat import DateFormat
 from django.utils.decorators import method_decorator
-from django.views.generic import DeleteView, UpdateView
+from django.views.generic import DeleteView, UpdateView, CreateView, ListView
 
+from amc.models import AMCRenewal
+from lib.decorators import class_view_decorator
 from projects.models import Project
-from .forms import NewTicketForm
+from .forms import NewTicketForm, ClientForm
 from .models import Client, ClientProject, ClientProjectDocument, SupportRequest, SupportActivity, \
-    SupportRequestActivityFiles, SupportRequestFiles, TOKEN_STATUS, TICKET_STATUS
+    SupportRequestActivityFiles, SupportRequestFiles, TICKET_STATUS
 
 
 # Create your views here.
@@ -34,9 +33,13 @@ def project(request, pk):
     project_data = ClientProject.objects.get(pk=pk)
     documents_data = ClientProjectDocument.objects.filter(client_project=project_data)
     support_requests_data = SupportRequest.objects.filter(client_project=project_data)
+    amc_data = AMCRenewal.objects.filter(client_project=project_data)
+
+    active_tab = request.GET.get('tab', "overview")
 
     page = request.GET.get('page', 1)
 
+    # Pagination for Support Request
     paginator = Paginator(support_requests_data, 5)
     try:
         support_requests_data = paginator.page(page)
@@ -45,14 +48,20 @@ def project(request, pk):
     except EmptyPage:
         support_requests_data = paginator.page(paginator.num_pages)
 
-    active_tab = request.GET.get('tab', "overview")
+    # Pagination for AMC Renewal
+    paginator = Paginator(amc_data, 5)
+    try:
+        amc_data = paginator.page(page)
+    except PageNotAnInteger:
+        amc_data = paginator.page(1)
+    except EmptyPage:
+        amc_data = paginator.page(paginator.num_pages)
 
-    # return HttpResponse(documents_data)
     data = {"project_data": project_data, "documents_data": documents_data,
-            "support_requests_data": support_requests_data, "active_tab": active_tab}
+            "support_requests_data": support_requests_data,
+            "amc_data": amc_data,
+            "active_tab": active_tab}
     return render(request, 'clients/client_project_window.html', data)
-
-    # return HttpResponse(json.dumps(data))
 
 
 @login_required
@@ -173,14 +182,17 @@ def new_ticket(request, client_project_id):
 
         return JsonResponse({
             "status": "failed",
+            "errors": ticket_form.errors,
             "msg": "Error : Please check the entered data"
         })
 
     ticket_form = NewTicketForm()
+    ticket_form.fields['client_project'].initial = client_project_id
     return render(request, 'clients/new_support_request.html',
                   {'form': ticket_form, 'client_project_id': client_project_id})
 
 
+@class_view_decorator(staff_member_required)
 class SupportRequestDeleteView(DeleteView):
     model = SupportRequest
 
@@ -195,7 +207,7 @@ class SupportRequestDeleteView(DeleteView):
         return JsonResponse(payload)
 
 
-class SupportRequestUpdateView(UpdateView):
+class SupportRequestStatusUpdateView(UpdateView):
     model = SupportRequest
 
     @method_decorator(login_required)
@@ -209,3 +221,34 @@ class SupportRequestUpdateView(UpdateView):
             'msg': 'Support Ticket has been updated',
         }
         return JsonResponse(payload)
+
+
+@class_view_decorator(staff_member_required)
+class ClientCreateView(CreateView):
+    model = Client
+    form_class = ClientForm
+    template_name = 'common/basic-form.html'
+    success_url = reverse_lazy('clients_index')
+    extra_context = {'page_head': "New Client"}
+
+
+@class_view_decorator(staff_member_required)
+class ClientEditView(LoginRequiredMixin, UpdateView):
+    model = Client
+    form_class = ClientForm
+    template_name = 'common/basic-form.html'
+    success_url = reverse_lazy('clients_index')
+    extra_context = {'page_head': "Edit Client"}
+
+
+@class_view_decorator(staff_member_required)
+class ClientDeleteView(DeleteView):
+    model = Client
+    success_url = reverse_lazy('clients_index')
+
+
+@class_view_decorator(staff_member_required)
+class ClientListView(ListView):
+    model = Client
+    template_name = 'clients/list.html'
+    paginate_by = 10

@@ -1,8 +1,12 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView, CreateView, DeleteView, ListView
 
 from clients.models import ClientProject, Client
+from lib.decorators import class_view_decorator
+from .forms import ProjectForm
 from .models import Project
 
 
@@ -44,3 +48,34 @@ def get_client_projects(client_id):
 def get_client_info(client_id):
     client_info = Client.objects.get(pk=client_id)
     return client_info
+
+
+@class_view_decorator(staff_member_required)
+class ProjectCreateView(CreateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'common/basic-form.html'
+    success_url = reverse_lazy('projects_index')
+    extra_context = {'page_head': "New Project"}
+
+
+@class_view_decorator(staff_member_required)
+class ProjectEditView(UpdateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'common/basic-form.html'
+    success_url = reverse_lazy('projects_index')
+    extra_context = {'page_head': "Edit Project"}
+
+
+@class_view_decorator(staff_member_required)
+class ProjectDeleteView(DeleteView):
+    model = Project
+    success_url = reverse_lazy('clients_index')
+
+
+@class_view_decorator(staff_member_required)
+class ProjectListView(ListView):
+    model = Project
+    template_name = 'projects/list.html'
+    paginate_by = 10

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load custom_tags %}
+
+{% block content %}
+
+    <div class="row m-5" style="">
+
+        <form method="post">{% csrf_token %}
+
+            <p>Are you sure you want to delete "{{ object }}"?</p>
+
+            <input type="submit" class="button btn btn-sm btn-danger" value="Confirm">
+        </form>
+
+    </div>
+
+{% endblock content %}

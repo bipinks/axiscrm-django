@@ -2,16 +2,28 @@
 
 {% block content %}
 
-    <div class="m-3" style="text-align:left">
+    <style>
+
+        .card-img-div {
+            border-bottom: 1px solid #dedcdc;
+        }
+
+    </style>
+
+    <div style="text-align:left">
         <h4>All Projects - {{ client_info.name }}</h4>
     </div>
+    <hr>
 
-    <div class="row">
+    <div class="row ">
+
 
         {% for data in client_projects_data %}
 
-            <div class="card" style="width: 18rem; margin: 2px; ">
-                <div class="text-center mt-2">
+
+
+            <div class="card" style="width: 18rem; margin: 2px;height: 415px; ">
+                <div class="text-center mt-2 card-img-div" style="height: 60px">
                     <img style="width: 200px; max-height: 60px;text-align: center" src="{{ data.project.logo.url }}"
                          class="card-img-top"
                          alt="...">
@@ -19,22 +31,25 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title text-center">{{ data.project.name }}</h5>
-                    <p class="card-text text-center">{{ data.project.description|truncatechars:150 }}</p>
+                    <p class="card-text text-center">{{ data.project.description|truncatechars:100 }}</p>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item text-center">Start Date : {{ data.start_date }}</li>
                     <li class="list-group-item text-center">Next AMC : {{ data.next_amc_date }}</li>
-                    <li class="list-group-item text-center">Total Tickets : {{ data.supportrequest_set.all|length }}</li>
+                    <li class="list-group-item text-center">Total Tickets
+                        : {{ data.supportrequest_set.all|length }}</li>
                     <li class="list-group-item text-center">
                         <a href="{% url 'clients_view_project' data.id %}" class="btn btn-primary btn-sm m-1">
                             View Project</a>
-                        <a href="{% url 'clients_new_ticket' data.id %}" class="btn btn-warning btn-sm m-1">
+                        <a href="{% url 'clients_new_ticket' data.id %}" class="btn btn-google btn-sm m-1">
                             New Ticket</a>
                     </li>
 
                 </ul>
             </div>
 
+        {% empty %}
+            <li>There are no projects assigned for this client</li>
 
         {% endfor %}
 

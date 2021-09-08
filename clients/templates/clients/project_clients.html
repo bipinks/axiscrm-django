@@ -2,10 +2,10 @@
 
 {% block content %}
 
-    <div class="m-3" style="text-align:left">
+    <div style="text-align:left">
         <h4>All Clients - {{ project_info.name }}</h4>
     </div>
-
+    <hr>
     <div class="row">
 
         {% for data in project_client_data %}
@@ -36,6 +36,9 @@
                 </div>
             </div>
 
+
+            {% empty %}
+            <li>There are no clients assigned for any project</li>
 
         {% endfor %}
 

@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+    <style>
+        .dropdown-toggle {
+            width: 100%;
+        }
+
+    </style>
+
+
+    <div style="text-align:left">
+        <h4>All Projects <a href="{% url 'project_create' %}" class="btn btn-md btn-facebook">Create</a></h4>
+    </div>
+    <hr>
+
+    <div class="row">
+
+
+        <div class="row justify-content-center d-flex align-items-center text-center">
+
+
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Code</th>
+                    <th scope="col" style="width: 25%">Description</th>
+                    <th scope="col">Logo</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for obj in object_list %}
+                    <tr class="text-center">
+                        <th scope="row" class="align-middle">{{ forloop.counter }}</th>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.code }}</td>
+                        <td>{{ obj.description|truncatechars:75 }}</td>
+                        <td><img src="{{ obj.logo.url }}" style="width: 175px"></td>
+                        <td>
+
+                            <div class="row justify-content-center d-flex align-items-center">
+
+                                <div class="dropdown">
+                                    <button class="btn btn-google btn-sm dropdown-toggle" type="button"
+                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item"
+                                               href="{% url 'project_update' obj.id %}">Edit</a></li>
+                                        <li><a class="dropdown-item"
+                                               href="{% url 'project_delete' obj.id %}">Delete</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+                    <tr>
+                        <td colspan="5">There are no clients</td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+
+            <div class="pagination justify-content-center">
+
+                <ul class="pagination">
+
+                    {% if data.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page=1">First</a></li>
+
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ data.previous_page_number }}">previous</a></li>
+
+                    {% endif %}
+
+                    {% for i in data.paginator.page_range %}
+                        {% if data.number == i %}
+
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link"
+                                   href="?page={{ i }}">{{ i }}</a></li>
+
+                        {% else %}
+
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if data.has_next %}
+
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ data.next_page_number }}">NEXT</a></li>
+
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ data.end_index }}">LAST</a></li>
+
+                    {% endif %}
+
+                    {#{% endif %}#}
+                </ul>
+
+
+                <span class="current">
+
+{#                    <li class="page-item active" aria-current="page">#}
+{#                            <a class="page-link"#}
+{#                               href="#">{{ support_requests_data.number }}</a></li>#}
+
+{#                    Page {{ support_requests_data.number }} of {{ support_requests_data.paginator.num_pages }}#}
+                </span>
+
+
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+    <script>
+
+        $(function () {
+            $(".datepicker").datepicker({
+                autoclose: true,
+                todayHighlight: true
+            })
+        });
+
+    </script>
+
+
+    <script>
+
+
+        $(document).on("click", ".delete-req", function (e) {
+
+            e.preventDefault();
+            var url = $(this).attr("href")
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                type: 'post',
+
+                success: function (data) {
+                    alert(data.msg);
+                    location.reload()
+                }
+            })
+
+        });
+
+
+        $(document).on("click", ".ticket_status", function (e) {
+
+            e.preventDefault();
+            var url = $(this).attr("href")
+            var status = $(this).data("status")
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                data: {
+                    status: status,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                type: 'post',
+
+                success: function (data) {
+                    alert(data.msg);
+                    location.reload()
+                }
+            })
+
+        });
+
+
+    </script>
+
+
+
+{% endblock javascript %}

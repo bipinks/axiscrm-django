@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+    <style>
+        .dropdown-toggle {
+            width: 100%;
+        }
+
+    </style>
+
+
+    <div style="text-align:left">
+        <h4>AMC Renewals <a href="{% url 'amc_create' %}" class="btn btn-md btn-facebook">Create</a></h4>
+    </div>
+    <hr>
+
+    <div class="row">
+
+
+        <div class="row justify-content-center d-flex align-items-center text-center">
+
+            <form class="row gx-3 gy-2 align-items-center mb-3" style="text-align: left">
+                <div class="col-sm-3">
+                    <label for="specificSizeInputName">Renewal Date From:</label>
+                    <div class="input-group date datepicker" data-date-format="yyyy-mm-dd">
+                        <input class="form-control" value="{{ request.GET.from_date|default:"2000-01-01" }}"
+                               name="from_date" type="text" readonly/>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="specificSizeInputName">Renewal Date To:</label>
+                    <div class="input-group date datepicker" data-date-format="yyyy-mm-dd">
+                        <input class="form-control" value="{{ request.GET.to_date|default:current_date }}"
+                               name="to_date" type="text" readonly/>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="specificSizeInputName">Project:</label>
+                    <select class="form-select" name="project" aria-label="Default select example">
+                        <option value="">Choose a project</option>
+                        {% for project in all_projects %}
+
+                            <option
+                                    {% if request.GET.project == project.id|stringformat:"i" %}
+                                        {{ 'selected' }}
+                                    {% endif %}
+                                    value="{{ project.id }}">{{ project.name }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="specificSizeInputName">Client:</label>
+                    <select class="form-select" name="client" aria-label="Default select example">
+                        <option value="">Choose a client</option>
+                        {% for client in all_clients %}
+                            <option
+                                    {% if request.GET.client == client.id|stringformat:"i" %}
+                                        {{ 'selected' }}
+                                    {% endif %}
+                                    value="{{ client.id }}">{{ client.name }}</option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+
+
+            <table class="table table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col" style="width: 10%">Start Date</th>
+                    <th scope="col" style="width: 10%">End Date</th>
+                    <th scope="col" style="width: 10%">Renewed Date</th>
+                    <th scope="col" style="width: 10%">Reference</th>
+                    <th scope="col">Project</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for obj in data %}
+                    <tr class="text-center">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ obj.start_date }}</td>
+                        <td>{{ obj.end_date }}</td>
+                        <td>{{ obj.renewed_date }}</td>
+                        <td>{{ obj.reference }}</td>
+                        <td>{{ obj.client_project.project.name }}</td>
+                        <td>{{ obj.client_project.client.name }}</td>
+                        <td>{{ obj.amount }}</td>
+                        <td>{{ obj.description }}</td>
+                        <td>
+
+                            <div class="row justify-content-center d-flex align-items-center">
+
+                                <div class="dropdown">
+                                    <button class="btn btn-google btn-sm dropdown-toggle" type="button"
+                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item delete-req"
+                                               href="">Delete</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+                    <tr>
+                        <td colspan="5">There are no amc renewals</td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+
+            <div class="pagination justify-content-center">
+
+                <ul class="pagination">
+
+                    {% if data.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page=1">First</a></li>
+
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ data.previous_page_number }}">previous</a></li>
+
+                    {% endif %}
+
+                    {% for i in data.paginator.page_range %}
+                        {% if data.number == i %}
+
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link"
+                                   href="?page={{ i }}">{{ i }}</a></li>
+
+                        {% else %}
+
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if data.has_next %}
+
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ data.next_page_number }}">NEXT</a></li>
+
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ data.end_index }}">LAST</a></li>
+
+                    {% endif %}
+
+                    {#{% endif %}#}
+                </ul>
+
+
+                <span class="current">
+
+{#                    <li class="page-item active" aria-current="page">#}
+{#                            <a class="page-link"#}
+{#                               href="#">{{ support_requests_data.number }}</a></li>#}
+
+{#                    Page {{ support_requests_data.number }} of {{ support_requests_data.paginator.num_pages }}#}
+                </span>
+
+
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+    <script>
+
+        $(function () {
+            $(".datepicker").datepicker({
+                autoclose: true,
+                todayHighlight: true
+            })
+        });
+
+    </script>
+
+
+    <script>
+
+
+        $(document).on("click", ".delete-req", function (e) {
+
+            e.preventDefault();
+            var url = $(this).attr("href")
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                type: 'post',
+
+                success: function (data) {
+                    alert(data.msg);
+                    location.reload()
+                }
+            })
+
+        });
+
+
+        $(document).on("click", ".ticket_status", function (e) {
+
+            e.preventDefault();
+            var url = $(this).attr("href")
+            var status = $(this).data("status")
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                data: {
+                    status: status,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                type: 'post',
+
+                success: function (data) {
+                    alert(data.msg);
+                    location.reload()
+                }
+            })
+
+        });
+
+
+    </script>
+
+
+
+{% endblock javascript %}

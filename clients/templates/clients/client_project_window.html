@@ -4,9 +4,10 @@
 
 {% block content %}
 
-    <div class="m-3" style="text-align:center">
+    <div  style="text-align:center">
         <h4>{{ project_data.project.name }} - {{ project_data.client.name }} - Dashboard</h4>
     </div>
+    <hr>
 
     <style>
 
@@ -62,20 +63,13 @@
                     {% if active_tab == 'overview' %}
                         {{ 'active' }}
                     {% endif %}
-                    " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                    " id="pills-home-tab" data-bs-toggle="pill"
+                            onclick="window.location.href='?tab=overview'"
+                            data-bs-target="#pills-home"
                             type="button" role="tab" aria-controls="pills-home" aria-selected="true">Overview
                     </button>
                 </li>
-                {#            <li class="nav-item" role="presentation">#}
-                {#                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"#}
-                {#                        type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Files#}
-                {#                </button>#}
-                {#            </li>#}
-                <!--        <li class="nav-item" role="presentation">-->
-                <!--            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"-->
-                <!--                    type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Feeds-->
-                <!--            </button>-->
-                <!--        </li>-->
+
 
                 <li class="nav-item" role="presentation">
                     <button class="nav-link
@@ -83,9 +77,22 @@
                         {{ 'active' }}
                     {% endif %}" id="pills-support-requests-tab" data-bs-toggle="pill"
                             data-bs-target="#pills-support-requests"
+                            onclick="window.location.href='?tab=ticket'"
                             type="button" role="tab" aria-controls="pills-support-requests" aria-selected="false">
                         Support
                         Requests
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link
+                    {% if active_tab == 'amc' %}
+                        {{ 'active' }}
+                    {% endif %}" id="pills-amc-renewals-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-amc-renewals"
+                            onclick="window.location.href='?tab=amc'"
+                            type="button" role="tab" aria-controls="pills-amc-renewals" aria-selected="false">
+                        AMC Renewals
                     </button>
                 </li>
 
@@ -99,7 +106,8 @@
         </div>
 
         <div class="col-md-6" style="text-align: right">
-            <a href="{% url 'clients_new_ticket' project_data.id %}" class="button btn btn-sm btn-warning">New Ticket</a>
+            <a href="{% url 'clients_new_ticket' project_data.id %}" class="button btn btn-sm btn-google">New
+                Ticket</a>
         </div>
 
 
@@ -155,8 +163,8 @@
                         <tr class="text-center">
                             <th scope="row">{{ support_requests_data.start_index|add:forloop.counter0 }}</th>
                             <td>{{ req.created_at }}</td>
-                            <td>{{ req.title|truncatechars:150 }}</td>
-                            <td>Pending</td>
+                            <td>{{ req.title|truncatechars:100 }}</td>
+                            <td>{{ req.get_status_display }}</td>
                             <td>
 
                                 <div class="dropdown">
@@ -167,14 +175,21 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                         <li><a class="dropdown-item"
                                                href="{% url 'clients_view_support_request' req.id %}">Show</a></li>
-{#                                        <li><a class="dropdown-item" href="#">Delete</a></li>#}
-{#                                        <li><a class="dropdown-item" href="#">Resolve</a></li>#}
+                                        <li><a data-status="4" class="dropdown-item ticket_status"
+                                               href="{% url 'update_support_ticket' req.id %}">Close
+                                            This Ticket</a></li>
                                     </ul>
                                 </div>
 
                             </td>
 
                         </tr>
+
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">There are no tickets</td>
+                        </tr>
+
                     {% endfor %}
 
                     </tbody>
@@ -243,6 +258,113 @@
 
             </div>
 
+
+            <div class="tab-pane fade
+                    {% if active_tab == 'amc' %}
+                        {{ 'show active' }}
+                    {% endif %}" id="pills-amc-renewals" role="tabpanel"
+                 aria-labelledby="pills-amc-renewals-tab">
+
+
+                <table class="table table-bordered table-sm">
+                    <thead>
+                    <tr class="text-center">
+                        <th scope="col">#</th>
+                        <th scope="col" style="width: 16%">Date</th>
+                        <th scope="col" style="width: 16%">Reference</th>
+                        <th scope="col">Project</th>
+                        <th scope="col">Client</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for obj in amc_data %}
+                        <tr class="text-center">
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ obj.date }}</td>
+                            <td>{{ obj.reference }}</td>
+                            <td>{{ obj.client_project.project.name }}</td>
+                            <td>{{ obj.client_project.client.name }}</td>
+                            <td>{{ obj.amount }}</td>
+                            <td>{{ obj.description }}</td>
+
+                        </tr>
+
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">There are no amc renewals</td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+                <div class="pagination justify-content-center">
+
+                    <ul class="pagination">
+
+                        {% if amc_data.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page=1&tab=amc">First</a></li>
+
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ amc_data.previous_page_number }}&tab=amc">previous</a>
+                            </li>
+
+                        {% endif %}
+
+                        {% for i in amc_data.paginator.page_range %}
+                            {% if amc_data.number == i %}
+
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link"
+                                       href="?page={{ i }}&tab=amc">{{ i }}</a></li>
+
+                            {% else %}
+
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="?page={{ i }}&tab=amc">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if amc_data.has_next %}
+
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ amc_data.next_page_number }}&tab=amc">NEXT</a></li>
+
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ amc_data.end_index }}&tab=amc">LAST</a></li>
+
+                        {% endif %}
+
+
+                    </ul>
+
+
+                    <span class="current">
+
+{#                    <li class="page-item active" aria-current="page">#}
+{#                            <a class="page-link"#}
+{#                               href="#">{{ support_requests_data.number }}</a></li>#}
+
+{#                    Page {{ support_requests_data.number }} of {{ support_requests_data.paginator.num_pages }}#}
+                </span>
+
+
+                </div>
+
+
+            </div>
+
+
             <div class="tab-pane fade
                     {% if active_tab == 'files' %}
                         {{ 'show active' }}
@@ -280,3 +402,33 @@
     </div>
 
 {% endblock content %}
+
+{% block javascript %}
+
+    <script>
+        $(document).on("click", ".ticket_status", function (e) {
+
+            e.preventDefault();
+            var url = $(this).attr("href")
+            var status = $(this).data("status")
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                data: {
+                    status: status,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                type: 'post',
+
+                success: function (data) {
+                    alert(data.msg);
+                    location.reload()
+                }
+            })
+
+        });
+
+    </script>
+
+{% endblock javascript %}
