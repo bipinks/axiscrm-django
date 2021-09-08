@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, DeleteView, ListView
 
 from clients.models import ClientProject, Client
-from lib.decorators import class_view_decorator
+from my_lib.decorators import class_view_decorator
 from .forms import ProjectForm
 from .models import Project
 

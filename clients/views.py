@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView, CreateView, ListView
 
 from amc.models import AMCRenewal
-from lib.decorators import class_view_decorator
+from my_lib.decorators import class_view_decorator
 from projects.models import Project
 from .forms import NewTicketForm, ClientForm
 from .models import Client, ClientProject, ClientProjectDocument, SupportRequest, SupportActivity, \

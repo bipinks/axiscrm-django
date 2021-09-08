@@ -10,6 +10,7 @@ class Project(models.Model):
     class Meta:
         db_table = 'projects'
         verbose_name_plural = "Manage Projects"
+        ordering = ['-id']
 
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=255)

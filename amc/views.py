@@ -11,7 +11,7 @@ from django.views.generic import CreateView, DeleteView, UpdateView
 from amc.forms import AMCRenewalForm
 from amc.models import AMCRenewal
 from clients.models import Client
-from lib.decorators import class_view_decorator
+from my_lib.decorators import class_view_decorator
 from projects.models import Project
 
 
