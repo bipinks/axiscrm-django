@@ -1,10 +1,8 @@
 from django.conf import settings
 from django.core.mail import send_mail, EmailMessage
-from django.shortcuts import render
 
 # Create your views here.
 from django.template.loader import get_template
-from django.template import Context
 
 
 def send_email():
@@ -17,13 +15,23 @@ def send_email():
 
 
 def send_template_email(template, ctx):
+    cc = []
+    bcc = ['mr.bipinks@gmail.com']
+
+    subject = ctx["email_subject"]
+    to = [ctx["to_email"]]
+    from_email = f'Support <{settings.DEFAULT_FROM_EMAIL}>'
+    reply_to = [f'Support <{settings.DEFAULT_FROM_EMAIL}>']
+
     message = get_template(template).render(ctx)
     mail = EmailMessage(
-        subject="Your Ticket is Submitted",
+        subject=subject,
         body=message,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=['mr.bipinks@gmail.com'],
-        reply_to=['mail@axisproerp.com'],
+        from_email=from_email,
+        to=to,
+        reply_to=reply_to,
+        cc=cc,
+        bcc=bcc
     )
     mail.content_subtype = "html"
     return mail.send()
