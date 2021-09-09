@@ -13,6 +13,7 @@ from django.views.generic import DeleteView, UpdateView, CreateView, ListView
 
 from amc.models import AMCRenewal
 from my_lib.decorators import class_view_decorator
+from my_lib.views import send_template_email
 from projects.models import Project
 from .forms import NewTicketForm, ClientForm
 from .models import Client, ClientProject, ClientProjectDocument, SupportRequest, SupportActivity, \
@@ -173,6 +174,15 @@ def new_ticket(request, client_project_id):
             for f in files:
                 file_instance = SupportRequestFiles(file=f, support_request=ticket_object)
                 file_instance.save()
+
+            # Send email confirmation to client
+            send_template_email("emails/new_ticket.html", {
+                'email': ticket_object.client_project.client.email,
+                'ticket_no': ticket_object.ticket_no,
+                'title': ticket_object.title,
+                'client_name': ticket_object.client_project.client.name,
+                'description': ticket_object.description,
+            })
 
             return JsonResponse({
                 "status": "success",

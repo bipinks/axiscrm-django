@@ -98,9 +98,9 @@
                 {% for obj in data %}
                     <tr class="text-center">
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ obj.start_date }}</td>
-                        <td>{{ obj.end_date }}</td>
-                        <td>{{ obj.renewed_date }}</td>
+                        <td>{{ obj.start_date|date:'d-m-Y' }}</td>
+                        <td>{{ obj.end_date|date:'d-m-Y' }}</td>
+                        <td>{{ obj.renewed_date|date:'d-m-Y' }}</td>
                         <td>{{ obj.reference }}</td>
                         <td>{{ obj.client_project.project.name }}</td>
                         <td>{{ obj.client_project.client.name }}</td>

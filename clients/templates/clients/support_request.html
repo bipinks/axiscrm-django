@@ -133,43 +133,45 @@
 
 
                                 <div>
-                                <div class="media-block">
-                                    <a class="media-left" href="#">
-                                        <img class="img-circle img-sm" alt="Profile Picture"
-                                             src="{{ activity.created_by_logo }}"></a>
-                                    <div class="media-body">
-                                        <div class="mar-btm">
-                                            <a href="#" class="btn-link text-semibold media-heading box-inline">
-                                                {{ activity.created_by.first_name }}
-                                            </a>
-                                            <p class="text-muted text-sm"><i class="fa fa-clock-o fa-lg"></i>
-                                                {{ activity.created_at | timesince }} ago
+                                    <div class="media-block">
+                                        <a class="media-left" href="#">
+                                            <img class="img-circle img-sm" alt="Profile Picture"
+                                                 src="{{ activity.created_by_logo }}"></a>
+                                        <div class="media-body">
+                                            <div class="mar-btm">
+                                                <a href="#" class="btn-link text-semibold media-heading box-inline">
+                                                    {{ activity.created_by.first_name }}
+                                                </a>
+                                                <p class="text-muted text-sm"><i class="fa fa-clock-o fa-lg"></i>
+                                                    {{ activity.created_at | timesince }} ago
+                                                </p>
+
+                                            </div>
+                                            <p>{{ activity.description }}</p>
+
+                                            <p>
+
+                                                {% for f in activity.supportrequestactivityfiles_set.all %}
+                                                    <a target="_blank" class="activity_file_link"
+                                                       href="{{ f.file.url }}"
+                                                       style="margin-right: 15px">
+                                                        File-{{ forloop.counter }}
+                                                    </a>
+                                                {% endfor %}
+
                                             </p>
 
+                                            <hr>
                                         </div>
-                                        <p>{{ activity.description }}</p>
 
-                                        <p>
 
-                                            {% for f in activity.supportrequestactivityfiles_set.all %}
-                                                <a target="_blank" class="activity_file_link" href="{{ f.file.url }}"
-                                                   style="margin-right: 15px">
-                                                    File-{{ forloop.counter }}
-                                                </a>
-                                            {% endfor %}
-
-                                        </p>
-
-                                        <hr>
                                     </div>
 
-
+                                    {#                                </div>#}
                                 </div>
-
-
                             {% endfor %}
 
-                            </div>
+
                         </div>
                     </div>
 

@@ -8,11 +8,15 @@ from django.shortcuts import render, redirect
 from django.utils.datetime_safe import datetime
 
 from clients.models import Client, ClientProject, SupportRequest
+from my_lib.views import send_email, send_template_email
 from projects.models import Project
 
 
 @login_required
 def index(request):
+    # send_email()
+    # send_template_email()
+
     user = request.user
     if user.is_staff is False:
         return redirect('home_client_dashboard')

@@ -17,7 +17,7 @@ class Client(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=255,null=True, blank=True)
+    code = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
@@ -137,6 +137,13 @@ TICKET_STATUS = (
     ('5', 'Deferred'),
 )
 
+TICKET_TYPES = (
+    ('1', 'Service Request Ticket'),
+    ('2', 'Incident Ticket'),
+    ('3', 'Problem Ticket'),
+    ('4', 'Change Request Ticket')
+)
+
 
 class SupportRequest(models.Model):
     class Meta:
@@ -144,6 +151,7 @@ class SupportRequest(models.Model):
         verbose_name_plural = "Support Requests"
 
     ticket_no = models.CharField(max_length=255)
+    ticket_type = models.CharField(max_length=255, choices=TICKET_TYPES, default='1')
     client_project = models.ForeignKey(ClientProject, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=datetime.now, blank=True)
     resolved_at = models.DateTimeField(null=True, blank=True)

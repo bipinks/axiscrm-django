@@ -61,7 +61,7 @@ class ClientForm(ModelForm):
 class NewTicketForm(ModelForm):
     class Meta:
         model = models.SupportRequest
-        fields = ('title', 'description', 'client_project')
+        fields = ('ticket_type', 'title', 'description', 'client_project')
         widgets = {
             'title': forms.TextInput(),
             'description': forms.Textarea(),
