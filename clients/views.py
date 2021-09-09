@@ -177,7 +177,8 @@ def new_ticket(request, client_project_id):
 
             # Send email confirmation to client
             send_template_email("emails/new_ticket.html", {
-                'email': ticket_object.client_project.client.email,
+                'email_subject': 'Your ticket is submitted',
+                'to_email': ticket_object.client_project.client.email,
                 'ticket_no': ticket_object.ticket_no,
                 'title': ticket_object.title,
                 'client_name': ticket_object.client_project.client.name,
