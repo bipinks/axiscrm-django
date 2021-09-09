@@ -155,12 +155,11 @@ LOGOUT_REDIRECT_URL = 'login'
 
 # Email Config
 
-DEFAULT_FROM_EMAIL = 'mail@axisproerp.com'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'mail@axisproerp.com'
-EMAIL_HOST_PASSWORD = 'Daxis@217'
-EMAIL_PORT = 465
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+DEFAULT_FROM_EMAIL = env('EMAIL_DEFAULT_FROM_EMAIL')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = env('EMAIL_PORT')
 # EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
+EMAIL_USE_SSL = env('EMAIL_USE_SSL')
