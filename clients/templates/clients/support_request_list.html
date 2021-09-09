@@ -94,7 +94,7 @@
                 {% for req in support_requests_data %}
                     <tr class="text-center">
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ req.created_at }}</td>
+                        <td>{{ req.created_at|date:'d-m-Y H:i:s' }}</td>
                         <td>{{ req.title|safe|truncatechars:150 }}</td>
                         <td>{{ req.client_project.client.name }}</td>
                         <td>{{ req.client_project.project.name }}</td>

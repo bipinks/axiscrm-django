@@ -152,7 +152,8 @@
                     <tr class="text-center">
                         <th scope="col">#</th>
                         <th style="width: 18%" scope="col">DateTime</th>
-                        <th scope="col">Title</th>
+                        <th scope="col">Type</th>
+                        <th scope="col" style="width: 35%">Title</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -162,7 +163,8 @@
                     {% for req in support_requests_data %}
                         <tr class="text-center">
                             <th scope="row">{{ support_requests_data.start_index|add:forloop.counter0 }}</th>
-                            <td>{{ req.created_at }}</td>
+                            <td>{{ req.created_at|date:'d-m-Y H:i:s' }}</td>
+                            <td>{{ req.get_ticket_type_display }}</td>
                             <td>{{ req.title|truncatechars:100 }}</td>
                             <td>{{ req.get_status_display }}</td>
                             <td>
@@ -270,7 +272,7 @@
                     <thead>
                     <tr class="text-center">
                         <th scope="col">#</th>
-                        <th scope="col" style="width: 16%">Date</th>
+                        <th scope="col" style="width: 16%">Renewed Date</th>
                         <th scope="col" style="width: 16%">Reference</th>
                         <th scope="col">Project</th>
                         <th scope="col">Client</th>
@@ -283,7 +285,7 @@
                     {% for obj in amc_data %}
                         <tr class="text-center">
                             <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ obj.date }}</td>
+                            <td>{{ obj.renewed_date|date:'d-m-Y' }}</td>
                             <td>{{ obj.reference }}</td>
                             <td>{{ obj.client_project.project.name }}</td>
                             <td>{{ obj.client_project.client.name }}</td>
