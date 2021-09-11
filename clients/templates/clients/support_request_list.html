@@ -55,20 +55,25 @@
                     </select>
                 </div>
 
-                <div class="col-sm-3">
-                    <label for="specificSizeInputName">Client:</label>
-                    <select class="form-select" name="client" aria-label="Default select example">
-                        <option value="">Choose a client</option>
-                        {% for client in all_clients %}
-                            <option
-                                    {% if request.GET.client == client.id|stringformat:"i" %}
-                                        {{ 'selected' }}
-                                    {% endif %}
-                                    value="{{ client.id }}">{{ client.name }}</option>
-                        {% endfor %}
 
-                    </select>
-                </div>
+                {% if request.user.is_staff %}
+                    <div class="col-sm-3">
+                        <label for="specificSizeInputName">Client:</label>
+                        <select class="form-select" name="client" aria-label="Default select example">
+                            <option value="">Choose a client</option>
+                            {% for client in all_clients %}
+                                <option
+                                        {% if request.GET.client == client.id|stringformat:"i" %}
+                                            {{ 'selected' }}
+                                        {% endif %}
+                                        value="{{ client.id }}">{{ client.name }}</option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                {% endif %}
+
+
 
 
                 <div class="col-auto">
@@ -83,8 +88,10 @@
                     <th scope="col">#</th>
                     <th scope="col" style="width: 15%">DateTime</th>
                     <th scope="col" style="width: 20%">Title</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">Client Project</th>
+                    {% if request.user.is_staff %}
+                        <th scope="col">Client</th>
+                    {% endif %}
+                    <th scope="col">Project</th>
                     <th scope="col">Status</th>
                     <th scope="col" style="width: 25%">Action</th>
                 </tr>
@@ -96,7 +103,9 @@
                         <th scope="row">{{ forloop.counter }}</th>
                         <td>{{ req.created_at|date:'d-m-Y H:i:s' }}</td>
                         <td>{{ req.title|safe|truncatechars:150 }}</td>
-                        <td>{{ req.client_project.client.name }}</td>
+                        {% if request.user.is_staff %}
+                            <td>{{ req.client_project.client.name }}</td>
+                        {% endif %}
                         <td>{{ req.client_project.project.name }}</td>
                         <td>{{ req.get_status_display }}</td>
                         <td>
@@ -144,7 +153,9 @@
                     </tr>
 
                 {% empty %}
-                    <tr><td colspan="5">There are no tickets</td></tr>
+                    <tr>
+                        <td colspan="5">There are no tickets</td>
+                    </tr>
 
                 {% endfor %}
 
