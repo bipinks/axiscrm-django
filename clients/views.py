@@ -78,7 +78,7 @@ def support_request(request, pk):
 
 
 @login_required
-@staff_member_required
+# @staff_member_required
 def get_all_support_requests(request):
     filters = {}
     for key, value in request.GET.items():
@@ -91,6 +91,15 @@ def get_all_support_requests(request):
                 filters["created_at__date__gte"] = str(value)
             if key == 'to_date':
                 filters["created_at__date__lte"] = str(value)
+
+    user = request.user
+    if user.is_staff is False:
+        filters["client_project__client__user"] = user
+        all_projects = Project.objects.filter(clientproject__client__user=user)
+        all_clients = []
+    else:
+        all_projects = Project.objects.all()
+        all_clients = Client.objects.all()
 
     support_requests_data = SupportRequest.objects.filter(**filters)
 
@@ -106,8 +115,6 @@ def get_all_support_requests(request):
     except EmptyPage:
         support_requests_data = paginator.page(paginator.num_pages)
 
-    all_projects = Project.objects.all()
-    all_clients = Client.objects.all()
     # print(filters)
 
     df = DateFormat(datetime.now())
