@@ -291,8 +291,8 @@ class ClientProjectsListView(ListView):
 
         # default filter
         filters = {
-            "next_amc_date__gte": get_current_date(),
-            "next_amc_date__lte": get_current_date()
+            # "next_amc_date__gte": get_current_date(),
+            # "next_amc_date__lte": get_current_date()
         }
         for key, value in self.request.GET.items():
 
