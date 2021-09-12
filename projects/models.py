@@ -13,9 +13,9 @@ class Project(models.Model):
         ordering = ['-id']
 
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=255)
+    code = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField()
-    logo = models.FileField(null=True, blank=True, upload_to='projects/', default='clients/project_default.png')
+    logo = models.FileField(null=True, blank=True, upload_to='projects/', default='projects/project_default.png')
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

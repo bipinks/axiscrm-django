@@ -13,9 +13,9 @@ from django.views.generic import DeleteView, UpdateView, CreateView, ListView
 
 from amc.models import AMCRenewal
 from my_lib.decorators import class_view_decorator
-from my_lib.views import send_template_email
+from my_lib.views import send_template_email, get_current_date
 from projects.models import Project
-from .forms import NewTicketForm, ClientForm
+from .forms import NewTicketForm, ClientForm, ClientProjectsForm
 from .models import Client, ClientProject, ClientProjectDocument, SupportRequest, SupportActivity, \
     SupportRequestActivityFiles, SupportRequestFiles, TICKET_STATUS
 
@@ -270,3 +270,59 @@ class ClientListView(ListView):
     model = Client
     template_name = 'clients/list.html'
     paginate_by = 10
+
+
+
+#Views for Client Projects
+
+
+@class_view_decorator(staff_member_required)
+class ClientProjectsListView(ListView):
+    model = ClientProject
+    template_name = 'clients/client_project_report.html'
+    paginate_by = 10
+    extra_context = {
+        'all_projects': Project.objects.all(),
+        'all_clients': Client.objects.all(),
+        "current_date": get_current_date(),
+    }
+
+    def get_queryset(self):
+
+        # default filter
+        filters = {
+            "next_amc_date__gte": get_current_date(),
+            "next_amc_date__lte": get_current_date()
+        }
+        for key, value in self.request.GET.items():
+
+            if value != '':
+                if key == 'client':
+                    filters["client"] = value
+                if key == 'project':
+                    filters["project"] = value
+                if key == 'amc_from_date':
+                    filters["next_amc_date__gte"] = str(value)
+                if key == 'amc_to_date':
+                    filters["next_amc_date__lte"] = str(value)
+
+        object_list = ClientProject.objects.filter(**filters)
+        return object_list
+
+
+@class_view_decorator(staff_member_required)
+class ClientProjectsCreateView(CreateView):
+    model = ClientProject
+    form_class = ClientProjectsForm
+    template_name = 'common/basic-form.html'
+    success_url = reverse_lazy('clients_projects_list')
+    extra_context = {'page_head': "Assign a Client to Project"}
+
+
+@class_view_decorator(staff_member_required)
+class ClientProjectsEditView(UpdateView):
+    model = ClientProject
+    form_class = ClientProjectsForm
+    template_name = 'common/basic-form.html'
+    success_url = reverse_lazy('clients_projects_list')
+    extra_context = {'page_head': "Edit a client project"}

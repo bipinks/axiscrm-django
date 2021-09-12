@@ -7,16 +7,23 @@
         .card {
             height: 220px;
         }
+
+        .amc_tot_row {
+            background: #edeff3;
+            font-weight: bold;
+            text-align: center;
+        }
+
     </style>
 
     <h4>
-    Admin - Dashboard
+        Admin - Dashboard
     </h4>
     <hr>
 
     <div class="row">
 
-        <div class="card text-white bg-primary m-1 col-md-3" >
+        <div class="card text-white bg-primary m-1 col-md-3">
             <div class="card-header">Projects</div>
             <div class="card-body">
                 <h5 class="card-title text-white">Total Projects - {{ projects_count }}</h5>
@@ -25,7 +32,7 @@
                 <p class="card-text">{{ unassigned_projects_count }} Project(s) are unassigned with clients</p>
             </div>
         </div>
-        <div class="card text-white bg-secondary m-1 col-md-3" >
+        <div class="card text-white bg-secondary m-1 col-md-3">
             <div class="card-header">Clients</div>
             <div class="card-body">
                 <h5 class="card-title text-white">Total Clients - {{ clients_count }}</h5>
@@ -34,7 +41,7 @@
                 <p class="card-text">{{ unassigned_clients_count }} of them are unassigned with projects</p>
             </div>
         </div>
-        <div class="card text-white bg-success m-1 col-md-3" >
+        <div class="card text-white bg-success m-1 col-md-3">
             <div class="card-header">AMC Renewal</div>
             <div class="card-body">
                 <h5 class="card-title text-white">Due Today - {{ amc_due_today_count }} </h5>
@@ -43,7 +50,7 @@
                 <p class="card-text">{{ overdue_amc_count }} Project(s) are overdue</p>
             </div>
         </div>
-        <div class="card text-white bg-danger m-1 col-md-3" >
+        <div class="card text-white bg-danger m-1 col-md-3">
             <div class="card-header">Support Tickets</div>
             <div class="card-body">
                 <h5 class="card-title text-white">Total Tickets - {{ total_ticket_count }}</h5>
@@ -55,6 +62,34 @@
         </div>
 
     </div>
+
+    <div class="row">
+
+
+    </div>
+
+    <div class="row">
+        <div class="flex-fill">
+            <div class="card-header">
+
+                <h5 class="card-title mb-0 text-center">AMC Renewals - Next Year</h5>
+            </div>
+            <table class="table table-hover my-0">
+                <thead>
+                <tr style="text-align: center">
+                    <th class="d-none d-xl-table-cell">Project Name</th>
+                    <th class="d-none d-xl-table-cell">Total Clients</th>
+                    <th class="d-none d-md-table-cell">AMC Amount</th>
+                </tr>
+                </thead>
+                <tbody id="next_year_amc_summary">
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
 
     <div class="row">
 
@@ -74,6 +109,51 @@
 
 
     <script>
+
+        $(document).ready(function () {
+
+            $.ajax({
+                url: "next_year_amc_data/",
+                dataType: 'json',
+                type: 'get',
+
+                success: function (data) {
+                    {#alert(data.msg);#}
+                    {#location.reload()#}
+                    console.log(data)
+
+                    data = data.data;
+                    var tbody_html = "";
+
+                    var total_sum = 0;
+                    var total_client_cnt = 0;
+
+                    $.each(data, function (key, val) {
+
+                        tbody_html += "<tr style='text-align: center'>"
+                        tbody_html += "<td class='d-none d-xl-table-cell'>" + val.project_name + "</td>"
+                        tbody_html += "<td class='d-none d-xl-table-cell'>" + val.clients_cnt + "</td>"
+                        tbody_html += "<td class='d-none d-xl-table-cell'>" + val.sum_amc_amount + "</td>"
+                        tbody_html += "</tr>"
+
+                        total_sum += parseFloat(val.sum_amc_amount)
+                        total_client_cnt += parseInt(val.clients_cnt)
+
+                    });
+
+                    tbody_html += "<tr class='amc_tot_row'>"
+                    tbody_html += "<td class='d-none d-xl-table-cell'>TOTAL</td>"
+                    tbody_html += "<td class='d-none d-xl-table-cell'>" + total_client_cnt + "</td>"
+                    tbody_html += "<td class='d-none d-xl-table-cell'>" + total_sum + "</td>"
+                    tbody_html += "</tr>"
+
+                    $("#next_year_amc_summary").html(tbody_html)
+
+                }
+            })
+
+        })
+
 
         new Chart(document.getElementById("line-chart"), {
             type: 'line',

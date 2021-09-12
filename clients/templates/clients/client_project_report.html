@@ -11,30 +11,29 @@
 
 
     <div style="text-align:left">
-        <h4>AMC Renewals <a href="{% url 'amc_create' %}" class="btn btn-md btn-facebook">Create</a></h4>
+        <h4>Client and Projects List <a href="{% url 'clients_projects_create' %}" class="btn btn-md btn-facebook">Assign New</a></h4>
     </div>
     <hr>
 
     <div class="row">
 
-
         <div class="row justify-content-center d-flex align-items-center text-center">
 
             <form class="row gx-3 gy-2 align-items-center mb-3" style="text-align: left">
                 <div class="col-sm-3">
-                    <label for="specificSizeInputName">Renewal Date From:</label>
+                    <label for="specificSizeInputName">AMC Date From:</label>
                     <div class="input-group date datepicker" data-date-format="yyyy-mm-dd">
-                        <input class="form-control" value="{{ request.GET.from_date|default:"2000-01-01" }}"
-                               name="from_date" type="text" readonly/>
+                        <input class="form-control" value="{{ request.GET.amc_to_date|default:current_date }}"
+                               name="amc_from_date" type="text" readonly/>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div>
                 </div>
 
                 <div class="col-sm-3">
-                    <label for="specificSizeInputName">Renewal Date To:</label>
+                    <label for="specificSizeInputName">AMC Date To:</label>
                     <div class="input-group date datepicker" data-date-format="yyyy-mm-dd">
-                        <input class="form-control" value="{{ request.GET.to_date|default:current_date }}"
-                               name="to_date" type="text" readonly/>
+                        <input class="form-control" value="{{ request.GET.amc_to_date|default:current_date }}"
+                               name="amc_to_date" type="text" readonly/>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div>
                 </div>
@@ -56,20 +55,25 @@
                     </select>
                 </div>
 
-                <div class="col-sm-3">
-                    <label for="specificSizeInputName">Client:</label>
-                    <select class="form-select" name="client" aria-label="Default select example">
-                        <option value="">Choose a client</option>
-                        {% for client in all_clients %}
-                            <option
-                                    {% if request.GET.client == client.id|stringformat:"i" %}
-                                        {{ 'selected' }}
-                                    {% endif %}
-                                    value="{{ client.id }}">{{ client.name }}</option>
-                        {% endfor %}
 
-                    </select>
-                </div>
+                {% if request.user.is_staff %}
+                    <div class="col-sm-3">
+                        <label for="specificSizeInputName">Client:</label>
+                        <select class="form-select" name="client" aria-label="Default select example">
+                            <option value="">Choose a client</option>
+                            {% for client in all_clients %}
+                                <option
+                                        {% if request.GET.client == client.id|stringformat:"i" %}
+                                            {{ 'selected' }}
+                                        {% endif %}
+                                        value="{{ client.id }}">{{ client.name }}</option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                {% endif %}
+
+
 
 
                 <div class="col-auto">
@@ -78,34 +82,31 @@
             </form>
 
 
-            <table class="table table-bordered table-sm table-responsive ">
+            <table class="table table-sm table-bordered table-responsive">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col" style="width: 10%">Start Date</th>
-                    <th scope="col" style="width: 10%">End Date</th>
-                    <th scope="col" style="width: 10%">Renewed Date</th>
-                    <th scope="col" style="width: 10%">Reference</th>
-                    <th scope="col">Project</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Description</th>
+                    <th scope="col" style="width: 16%">Client</th>
+                    <th scope="col" style="width: 16%">Project</th>
+                    <th scope="col">Project Amount</th>
+                    <th scope="col">AMC Amount</th>
+                    <th scope="col">Installed Date</th>
+                    <th scope="col">Next AMC Date</th>
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
 
-                {% for obj in data %}
+                {% for obj in object_list %}
                     <tr class="text-center">
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ obj.start_date|date:'d-m-Y' }}</td>
-                        <td>{{ obj.end_date|date:'d-m-Y' }}</td>
-                        <td>{{ obj.renewed_date|date:'d-m-Y' }}</td>
-                        <td>{{ obj.reference }}</td>
-                        <td>{{ obj.client_project.project.name }}</td>
-                        <td>{{ obj.client_project.client.name }}</td>
-                        <td>{{ obj.amount }}</td>
-                        <td>{{ obj.description }}</td>
+                        <th scope="row" class="align-middle">{{ forloop.counter }}</th>
+                        <td>{{ obj.client.name }}</td>
+                        <td>{{ obj.project.name }}</td>
+                        <td>{{ obj.project_amount }}</td>
+                        <td>{{ obj.amc_amount }}</td>
+                        <td>{{ obj.start_date }}</td>
+                        <td>{{ obj.next_amc_date }}</td>
+
                         <td>
 
                             <div class="row justify-content-center d-flex align-items-center">
@@ -117,7 +118,7 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                         <li><a class="dropdown-item"
-                                               href="">Delete</a></li>
+                                               href="{% url 'client_project_update' obj.id %}">Edit</a></li>
                                     </ul>
                                 </div>
 
@@ -130,7 +131,7 @@
 
                 {% empty %}
                     <tr>
-                        <td colspan="5">There are no amc renewals</td>
+                        <td colspan="5">There are no projects</td>
                     </tr>
 
                 {% endfor %}
@@ -141,9 +142,9 @@
 
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
-                    {% if data.has_previous %}
+                    {% if page_obj.has_previous %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ data.previous_page_number }}">Previous</a>
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled">
@@ -151,31 +152,31 @@
                         </li>
                     {% endif %}
 
-                    {% if data.number|add:'-4' > 1 %}
+                    {% if page_obj.number|add:'-4' > 1 %}
                         <li class="page-item"><a class="page-link"
-                                                 href="?page={{ data.number|add:'-5' }}">&hellip;</a></li>
+                                                 href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a></li>
                     {% endif %}
 
-                    {% for i in data.paginator.page_range %}
-                        {% if data.number == i %}
+                    {% for i in page_obj.paginator.page_range %}
+                        {% if page_obj.number == i %}
                             <li class="page-item active" aria-current="page">
                               <span class="page-link">
                                 {{ i }}
                               </span>
                             </li>
-                        {% elif i > data.number|add:'-5' and i < data.number|add:'5' %}
+                        {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %}
                             <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                         {% endif %}
                     {% endfor %}
 
-                    {% if data.paginator.num_pages > data.number|add:'4' %}
+                    {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
                         <li class="page-item"><a class="page-link" href="?page={{ data.number|add:'5' }}">&hellip;</a>
                         </li>
                     {% endif %}
 
-                    {% if data.has_next %}
+                    {% if page_obj.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ data.next_page_number }}">Next</a>
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled">
@@ -184,7 +185,6 @@
                     {% endif %}
                 </ul>
             </nav>
-
 
         </div>
     </div>
@@ -208,57 +208,6 @@
 
     </script>
 
-
-    <script>
-
-
-        $(document).on("click", ".delete-req", function (e) {
-
-            e.preventDefault();
-            var url = $(this).attr("href")
-
-            $.ajax({
-                url: url,
-                dataType: 'json',
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                type: 'post',
-
-                success: function (data) {
-                    alert(data.msg);
-                    location.reload()
-                }
-            })
-
-        });
-
-
-        $(document).on("click", ".ticket_status", function (e) {
-
-            e.preventDefault();
-            var url = $(this).attr("href")
-            var status = $(this).data("status")
-
-            $.ajax({
-                url: url,
-                dataType: 'json',
-                data: {
-                    status: status,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                type: 'post',
-
-                success: function (data) {
-                    alert(data.msg);
-                    location.reload()
-                }
-            })
-
-        });
-
-
-    </script>
 
 
 

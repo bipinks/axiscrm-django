@@ -19,6 +19,11 @@ urlpatterns = [
     path('all_support_requests/', views.get_all_support_requests, name='clients_all_support_requests'),
     path('view_project/<client_project_id>/new_ticket/', views.new_ticket, name='clients_new_ticket'),
 
+    # Client project urls
+    path('client_projects_list/', views.ClientProjectsListView.as_view(), name='clients_projects_list'),
+    path('client_project_create/', views.ClientProjectsCreateView.as_view(), name='clients_projects_create'),
+    path('<pk>/client_project_update/', views.ClientProjectsEditView.as_view(), name='client_project_update'),
+
     path('<pk>/deleteTicket/', SupportRequestDeleteView.as_view(), name='delete_support_ticket'),
     path('<pk>/updateTicket', SupportRequestStatusUpdateView.as_view(), name='update_support_ticket'),
 
