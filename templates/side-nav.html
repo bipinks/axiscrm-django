@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="#">
@@ -14,19 +15,19 @@
 
             {% if request.user.is_superuser %}
 
-                <li class="sidebar-item active">
+                <li class="sidebar-item {% active 'home_index' %}">
                     <a class="sidebar-link" href="{% url 'home_index' %}">
                         <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {% active 'projects_index' %}">
                     <a class="sidebar-link" href="{% url 'projects_index' %}">
                         <i class="align-middle" data-feather="user"></i> <span class="align-middle">Projects</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {% active 'clients_index' %}">
                     <a class="sidebar-link" href="{% url 'clients_index' %}">
                         <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Clients</span>
                     </a>
@@ -38,40 +39,40 @@
                     Administration
                 </li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {% active 'client_list' %}">
                     <a class="sidebar-link" href="{% url 'client_list' %}">
                         <i class="align-middle" data-feather="square"></i> <span
                             class="align-middle">Manage Clients</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {% active 'project_list' %}">
                     <a class="sidebar-link" href="{% url 'project_list' %}">
                         <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Manage Projects</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {% active 'clients_projects_list' %}">
                     <a class="sidebar-link" href="{% url 'clients_projects_list' %}">
                         <i class="align-middle" data-feather="square"></i> <span
                             class="align-middle">Manage Client Projects</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {% active 'clients_all_support_requests' %}">
                     <a class="sidebar-link" href="{% url 'clients_all_support_requests' %}">
                         <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Manage Support Tickets</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {% active 'amc_list_all' %}">
                     <a class="sidebar-link" href="{% url 'amc_list_all' %}">
                         <i class="align-middle" data-feather="book"></i> <span class="align-middle">AMC Contracts</span>
                     </a>
                 </li>
 
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {% active 'user_list' %}">
                     <a class="sidebar-link" href="{% url 'user_list' %}">
                         <i class="align-middle" data-feather="book"></i> <span class="align-middle">Users</span>
                     </a>
@@ -79,13 +80,13 @@
 
             {% else %}
 
-                <li class="sidebar-item active">
+                <li class="sidebar-item active {% active 'home_index' %}">
                     <a class="sidebar-link" href="{% url 'home_index' %}">
                         <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">My Projects</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {% active 'clients_all_support_requests' %}">
                     <a class="sidebar-link" href="{% url 'clients_all_support_requests' %}">
                         <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">My Tickets</span>
                     </a>

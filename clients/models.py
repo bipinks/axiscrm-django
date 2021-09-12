@@ -72,6 +72,7 @@ class ClientProject(models.Model):
     class Meta:
         db_table = 'client_projects'
         verbose_name_plural = "Client Projects"
+        ordering = ['-id']
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     project = models.ForeignKey("projects.Project", on_delete=models.CASCADE)
@@ -151,6 +152,7 @@ class SupportRequest(models.Model):
     class Meta:
         db_table = 'support_requests'
         verbose_name_plural = "Support Requests"
+        ordering = ['-id']
 
     ticket_no = models.CharField(max_length=255)
     ticket_type = models.CharField(max_length=255, choices=TICKET_TYPES, default='1')
