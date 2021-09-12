@@ -167,9 +167,6 @@
 
                 <ul class="pagination">
 
-                    {#                    {% if support_requests_data.has_other_pages %}#}
-
-
                     {% if support_requests_data.has_previous %}
                         <li class="page-item">
                             <a class="page-link"
@@ -207,21 +204,8 @@
 
                     {% endif %}
 
-                    {#{% endif %}#}
                 </ul>
 
-
-                <span class="current">
-
-{#                    <li class="page-item active" aria-current="page">#}
-{#                            <a class="page-link"#}
-{#                               href="#">{{ support_requests_data.number }}</a></li>#}
-
-{#                    Page {{ support_requests_data.number }} of {{ support_requests_data.paginator.num_pages }}#}
-                </span>
-
-
-                </span>
             </div>
 
         </div>

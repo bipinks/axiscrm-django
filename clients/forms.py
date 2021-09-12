@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm, Textarea
 from . import models
-from .models import Client
+from .models import Client, ClientProject
 
 
 class ClientForm(ModelForm):
@@ -37,7 +37,7 @@ class ClientForm(ModelForm):
             user = User.objects.create_user(
                 username=username,
                 first_name=self.cleaned_data['name'],
-                is_staff=1,
+                is_staff=0,
                 email=self.cleaned_data['email'],
                 password='Daxis@217')
             self.instance.user = user
@@ -80,3 +80,10 @@ class SupportRequestFilesForm(forms.ModelForm):
     class Meta:
         model = models.SupportRequestFiles
         fields = ('file', 'support_request')
+
+
+class ClientProjectsForm(ModelForm):
+    class Meta:
+        model = ClientProject
+        fields = '__all__'
+        exclude = ('created_at', 'created_by')

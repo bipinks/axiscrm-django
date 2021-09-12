@@ -8,5 +8,6 @@ urlpatterns = [
     path('<pk>/delete/', views.AmcDeleteView.as_view(), name='amc_delete'),
 
     path('list/', views.get_all_amc, name='amc_list_all'),
+    path('upload-amc/', views.upload_amc, name='amc_upload_amc'),
 
 ]

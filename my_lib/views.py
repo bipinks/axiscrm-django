@@ -3,6 +3,8 @@ from django.core.mail import send_mail, EmailMessage
 
 # Create your views here.
 from django.template.loader import get_template
+from django.utils.dateformat import DateFormat
+from datetime import datetime
 
 
 def send_email():
@@ -35,3 +37,15 @@ def send_template_email(template, ctx):
     )
     mail.content_subtype = "html"
     return mail.send()
+
+
+def get_current_date():
+    df = DateFormat(datetime.now())
+    df.format('Y-m-d')
+    return df.format('Y-m-d')
+
+
+def date_to_sql(date):
+    df = DateFormat(date)
+    df.format('Y-m-d')
+    return df.format('Y-m-d')

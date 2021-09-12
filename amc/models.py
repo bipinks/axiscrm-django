@@ -15,7 +15,7 @@ class AMCRenewal(models.Model):
         verbose_name_plural = "Manage AMC Renewals"
         ordering = ['-id']
 
-    reference = models.CharField(max_length=255)
+    reference = models.CharField(max_length=255, null=True, blank=True)
     client_project = models.ForeignKey(ClientProject, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()

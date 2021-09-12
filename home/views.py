@@ -1,7 +1,9 @@
 from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
+from django.db import connection
 from django.db.models import Count
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -64,3 +66,30 @@ def index(request):
             "in_progress_ticket_count": in_progress_ticket_count,
             "with_client_review_ticket_count": with_client_review_ticket_count,
         })
+
+
+def dictfetchall(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+
+
+def get_next_year_amc_data(request):
+    sql = 'SELECT p.name project_name,COUNT(DISTINCT(p.id)) projects_cnt,' \
+          'COUNT(DISTINCT(c.id)) clients_cnt,SUM(cp.amc_amount) sum_amc_amount ' \
+          'FROM client_projects cp LEFT JOIN projects p ON p.id=cp.project_id ' \
+          'LEFT JOIN clients c ON c.id=cp.client_id ' \
+          'WHERE cp.next_amc_date >= CURDATE() AND cp.next_amc_date < (DATE_ADD(CURDATE(), INTERVAL 1 YEAR)) ' \
+          'GROUP BY cp.project_id'
+
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    row = dictfetchall(cursor)
+
+    return JsonResponse({
+        "status": "OK",
+        "data": row
+    })

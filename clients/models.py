@@ -79,6 +79,8 @@ class ClientProject(models.Model):
     next_amc_date = models.DateField(default=date_next_year)
     description = models.TextField()
     status = models.CharField(max_length=255, choices=TOKEN_STATUS, default='0')
+    project_amount = models.DecimalField(decimal_places=2, max_digits=10, null=True, blank=True)
+    amc_amount = models.DecimalField(decimal_places=2, max_digits=10, null=True, blank=True)
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -138,10 +140,10 @@ TICKET_STATUS = (
 )
 
 TICKET_TYPES = (
-    ('1', 'Service Request Ticket'),
-    ('2', 'Incident Ticket'),
-    ('3', 'Problem Ticket'),
-    ('4', 'Change Request Ticket')
+    ('1', 'Service Related'),
+    ('2', 'Sales Related'),
+    ('3', 'Billing Related'),
+    ('4', 'Others')
 )
 
 
