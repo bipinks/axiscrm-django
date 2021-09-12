@@ -64,30 +64,21 @@
     </div>
 
     <div class="row">
-
-
-    </div>
-
-    <div class="row">
-        <div class="flex-fill">
-            <div class="card-header">
-
-                <h5 class="card-title mb-0 text-center">AMC Renewals - Next Year</h5>
-            </div>
-            <table class="table table-hover my-0">
-                <thead>
-                <tr style="text-align: center">
-                    <th class="d-none d-xl-table-cell">Project Name</th>
-                    <th class="d-none d-xl-table-cell">Total Clients</th>
-                    <th class="d-none d-md-table-cell">AMC Amount</th>
-                </tr>
-                </thead>
-                <tbody id="next_year_amc_summary">
-
-                </tbody>
-            </table>
+        <div class="card-header">
+            <h5 class="card-title mb-0 text-center">AMC Renewals - Upcoming year</h5>
         </div>
+        <table class="table table-hover my-0">
+            <thead>
+            <tr style="text-align: center">
+                <th class="d-xl-table-cell">Project Name</th>
+                <th class="d-xl-table-cell">Total Clients</th>
+                <th class="d-md-table-cell">AMC Amount</th>
+            </tr>
+            </thead>
+            <tbody id="next_year_amc_summary">
 
+            </tbody>
+        </table>
     </div>
 
 
@@ -131,9 +122,9 @@
                     $.each(data, function (key, val) {
 
                         tbody_html += "<tr style='text-align: center'>"
-                        tbody_html += "<td class='d-none d-xl-table-cell'>" + val.project_name + "</td>"
-                        tbody_html += "<td class='d-none d-xl-table-cell'>" + val.clients_cnt + "</td>"
-                        tbody_html += "<td class='d-none d-xl-table-cell'>" + val.sum_amc_amount + "</td>"
+                        tbody_html += "<td class='d-xl-table-cell'>" + val.project_name + "</td>"
+                        tbody_html += "<td class='d-xl-table-cell'>" + val.clients_cnt + "</td>"
+                        tbody_html += "<td class='d-xl-table-cell'>" + val.sum_amc_amount + "</td>"
                         tbody_html += "</tr>"
 
                         total_sum += parseFloat(val.sum_amc_amount)
@@ -142,9 +133,9 @@
                     });
 
                     tbody_html += "<tr class='amc_tot_row'>"
-                    tbody_html += "<td class='d-none d-xl-table-cell'>TOTAL</td>"
-                    tbody_html += "<td class='d-none d-xl-table-cell'>" + total_client_cnt + "</td>"
-                    tbody_html += "<td class='d-none d-xl-table-cell'>" + total_sum + "</td>"
+                    tbody_html += "<td class='d-xl-table-cell'>TOTAL</td>"
+                    tbody_html += "<td class='d-xl-table-cell'>" + total_client_cnt + "</td>"
+                    tbody_html += "<td class='d-xl-table-cell'>" + total_sum + "</td>"
                     tbody_html += "</tr>"
 
                     $("#next_year_amc_summary").html(tbody_html)
