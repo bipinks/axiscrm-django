@@ -1,8 +1,4 @@
 from django import template
-from django.urls import reverse, NoReverseMatch
-import re
-
-from clients.models import SupportRequest
 
 register = template.Library()
 

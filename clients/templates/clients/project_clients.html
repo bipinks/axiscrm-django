@@ -12,7 +12,8 @@
             <div class="card col-sm-4 mb-3">
                 <div class="row ">
                     <div class="col-md-4 justify-content-center d-flex align-items-center">
-                        <img src="{{ data.client.logo.url|default_if_none:"https://axisproerp.com/images/axispro.png" }}" class="img-fluid rounded-start" alt="...">
+                        <img src="{{ data.client.logo.url|default_if_none:"https://axisproerp.com/images/axispro.png" }}"
+                             class="img-fluid rounded-start" alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
@@ -27,17 +28,20 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <span>Total Projects:{{data.client.clientproject_set.all|length}}</span>
-                            <span style="float: right">
-                            Total Tickets:{{ data.total_tickets }}
+                            <span>Total Projects:
+                                <span class="badge bg-info">{{ data.client.clientproject_set.all|length }}</span>
                             </span>
+                            <span style="float: right">Total Tickets:
+                                <span class="badge bg-success">{{ data.total_tickets }}</span>
+                            </span>
+
                         </li>
                     </ul>
                 </div>
             </div>
 
 
-            {% empty %}
+        {% empty %}
             <li>There are no clients assigned for any project</li>
 
         {% endfor %}

@@ -29,15 +29,17 @@
                     <p class="card-text text-center">{{ project.description|truncatechars:100 }}</p>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item text-center">Total
-                        Clients: {{ project.clientproject_set.all|length }}</li>
+                    <li class="list-group-item text-center">
+                        Total Clients:
+                        <span class="badge bg-success">{{ project.clientproject_set.all|length }}</span>
+                    </li>
                     <li class="list-group-item text-center">
                         <a href="{% url 'projects_view_project_clients' project.id %}" class="btn btn-primary btn-sm">Show
                             Clients</a></li>
                 </ul>
             </div>
 
-            {% empty %}
+        {% empty %}
             <li>There are no projects</li>
 
         {% endfor %}

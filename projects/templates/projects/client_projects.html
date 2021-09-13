@@ -36,8 +36,10 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item text-center">Start Date : {{ data.start_date }}</li>
                     <li class="list-group-item text-center">Next AMC : {{ data.next_amc_date }}</li>
-                    <li class="list-group-item text-center">Total Tickets
-                        : {{ data.supportrequest_set.all|length }}</li>
+                    <li class="list-group-item text-center">
+                        Total Tickets :
+                    <span class="badge bg-success">{{ data.supportrequest_set.all|length }}</span>
+                    </li>
                     <li class="list-group-item text-center">
                         <a href="{% url 'clients_view_project' data.id %}" class="btn btn-primary btn-sm m-1">
                             View Project</a>

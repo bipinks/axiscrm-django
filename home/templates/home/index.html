@@ -104,7 +104,7 @@
         $(document).ready(function () {
 
             $.ajax({
-                url: "next_year_amc_data/",
+                url: "{% url 'home_next_year_amc_data' %}",
                 dataType: 'json',
                 type: 'get',
 
@@ -114,10 +114,10 @@
                     console.log(data)
 
                     data = data.data;
-                    var tbody_html = "";
+                    let tbody_html = "";
 
-                    var total_sum = 0;
-                    var total_client_cnt = 0;
+                    let total_sum = 0;
+                    let total_client_cnt = 0;
 
                     $.each(data, function (key, val) {
 
@@ -135,7 +135,7 @@
                     tbody_html += "<tr class='amc_tot_row'>"
                     tbody_html += "<td class='d-xl-table-cell'>TOTAL</td>"
                     tbody_html += "<td class='d-xl-table-cell'>" + total_client_cnt + "</td>"
-                    tbody_html += "<td class='d-xl-table-cell'>" + total_sum + "</td>"
+                    tbody_html += "<td class='d-xl-table-cell'>" + total_sum.toFixed(2) + "</td>"
                     tbody_html += "</tr>"
 
                     $("#next_year_amc_summary").html(tbody_html)

@@ -16,7 +16,7 @@
         {% for client in clients %}
 
 
-            <div class="card col-sm-4 mb-3" >
+            <div class="card col-sm-4 mb-3">
                 <div class="row ">
                     <div class="col-md-4 justify-content-center d-flex align-items-center">
                         <img src="{{ client.logo.url }}" class="img-fluid rounded-start" alt="...">
@@ -36,9 +36,11 @@
 
                     <ul class="list-group list-group-flush" style="border-top: 1px solid #ccc;">
                         <li class="list-group-item">
-                            <span>Total Projects:{{client.clientproject_set.all|length}}</span>
+                            <span>Total Projects:
+                                <span class="badge bg-info">{{ client.clientproject_set.all|length }}</span>
+                                </span>
                             <span style="float: right">Total Tickets:
-                                {{ client.total_tickets }}
+                                <span class="badge bg-success">{{ client.total_tickets }}</span>
                             </span>
                         </li>
 
@@ -47,7 +49,7 @@
                 </div>
             </div>
 
-            {% empty %}
+        {% empty %}
             <li>There are no clients</li>
 
         {% endfor %}
