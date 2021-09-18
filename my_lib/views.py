@@ -3,8 +3,11 @@ from django.core.mail import send_mail, EmailMessage
 
 # Create your views here.
 from django.template.loader import get_template
+from django.utils import timezone
 from django.utils.dateformat import DateFormat
-from datetime import datetime
+from datetime import datetime, timedelta
+
+
 
 
 def send_email():
@@ -49,3 +52,22 @@ def date_to_sql(date):
     df = DateFormat(date)
     df.format('Y-m-d')
     return df.format('Y-m-d')
+
+
+def date_next_year():
+    now = timezone.now()
+    return now + timedelta(days=365)
+
+
+def date_add_days(days):
+    now = timezone.now()
+    return now + timedelta(days=days)
+
+
+def dict_fetch_all(cursor):
+    """Return all rows from a cursor as a dict"""
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]

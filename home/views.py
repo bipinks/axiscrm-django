@@ -8,9 +8,10 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.utils.datetime_safe import datetime
+from django_mailbox.models import Mailbox, Message
 
 from clients.models import Client, ClientProject, SupportRequest
-from my_lib.views import send_email, send_template_email
+from my_lib.views import send_email, send_template_email, dict_fetch_all
 from projects.models import Project
 
 
@@ -18,6 +19,10 @@ from projects.models import Project
 def index(request):
     # send_email()
     # send_template_email()
+
+    # mail_t = Message.objects.get(pk=1)
+    #
+    # print(mail_t)
 
     user = request.user
     if user.is_staff is False:
@@ -68,15 +73,6 @@ def index(request):
         })
 
 
-def dictfetchall(cursor):
-    "Return all rows from a cursor as a dict"
-    columns = [col[0] for col in cursor.description]
-    return [
-        dict(zip(columns, row))
-        for row in cursor.fetchall()
-    ]
-
-
 def get_next_year_amc_data(request):
     sql = 'SELECT p.name project_name,COUNT(DISTINCT(p.id)) projects_cnt,' \
           'COUNT(DISTINCT(c.id)) clients_cnt,SUM(cp.amc_amount) sum_amc_amount ' \
@@ -87,7 +83,7 @@ def get_next_year_amc_data(request):
 
     cursor = connection.cursor()
     cursor.execute(sql)
-    row = dictfetchall(cursor)
+    row = dict_fetch_all(cursor)
 
     return JsonResponse({
         "status": "OK",

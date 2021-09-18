@@ -272,8 +272,7 @@ class ClientListView(ListView):
     paginate_by = 10
 
 
-
-#Views for Client Projects
+# Views for Client Projects
 
 
 @class_view_decorator(staff_member_required)

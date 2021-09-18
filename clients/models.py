@@ -8,6 +8,8 @@ from django.db import models, connection
 # Create your models here.
 from django.utils import timezone
 
+from my_lib.views import date_add_days, date_next_year
+
 
 class Client(models.Model):
     class Meta:
@@ -61,11 +63,6 @@ TOKEN_STATUS = (
     ('2', 'Project setup in progress'),
     ('3', 'Closed'),
 )
-
-
-def date_next_year():
-    now = timezone.now()
-    return now + timedelta(days=365)
 
 
 class ClientProject(models.Model):

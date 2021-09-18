@@ -24,6 +24,7 @@ urlpatterns = [
                   path('clients/', include('clients.urls')),
                   path('amc/', include('amc.urls')),
                   path('users/', include('users.urls')),
+                  path('mail-box/', include('mail_box.urls')),
 
 
                   path('auth/', include('django.contrib.auth.urls')),

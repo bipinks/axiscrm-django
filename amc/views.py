@@ -81,6 +81,7 @@ class AmcDeleteView(DeleteView):
     success_url = reverse_lazy('amc_list_all')
 
 
+@staff_member_required
 def upload_amc(request):
     if request.method == 'POST':
         dataset = Dataset()

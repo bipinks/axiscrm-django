@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_mailbox',
+
     'django_filters',
     'ckeditor',
     'crispy_forms',
@@ -49,7 +52,8 @@ INSTALLED_APPS = [
     'projects',
     'clients',
     'amc',
-    'users'
+    'users',
+    'mail_box'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
